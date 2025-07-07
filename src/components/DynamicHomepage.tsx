@@ -4,6 +4,7 @@ import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, Torus, Html } from '@react-three/drei';
 import * as THREE from 'three';
+import FloatingText from './FloatingText';
 
 // --- Background Component: Cosmic Ocean (Fullscreen) ---
 const vertexShader = `
@@ -174,6 +175,11 @@ export default function DynamicHomepage() {
             >
               gomix666.com
             </div>
+          </Html>
+
+          {/* Floating Text */}
+          <Html position={[-18, 10, 0]}>
+            <FloatingText text={`幸せになりたい\n人生七転八倒\n\n失敗に次ぐ失敗で借金300万\nそれでもあきらめられない\n\n幸せを勝ち取るために\nなんでも挑戦\n投資、副業、\nそしてブログ？\n\n私の挑戦を\nどうか笑ってやってください`} />
           </Html>
 
           <SolarSystemMonument />

@@ -3,6 +3,8 @@ import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ShootingStarCursor from "@/components/ShootingStarCursor";
+import StarrySky from '@/components/StarrySky';
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -22,6 +24,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${notoSansJp.className} bg-black text-white`}>
+        <StarrySky />
+        <ShootingStarCursor />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">{children}</main>
