@@ -1,4 +1,6 @@
 import DynamicHomepage from '@/components/DynamicHomepage';
+import YouTubeSection from '@/components/YouTubeSection';
+import ProfileSection from '@/components/ProfileSection';
 import { client } from '@/sanity/client';
 import { getPosts } from '@/sanity/queries';
 import { urlFor } from '@/sanity/image';
@@ -17,16 +19,10 @@ export default async function Home() {
       </section>
 
       {/* Profile Section */}
-      <section id="profile" className="py-20 bg-gray-900">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-cyan-300">Profile</h2>
-          <div className="max-w-3xl mx-auto text-center text-gray-300">
-            <p className="text-lg leading-relaxed">
-              ここにあなたのプロフィールや自己紹介を記述します。このセクションは、サイト訪問者にあなたの専門性や情熱を伝える絶好の機会です。ご自由の編集してください。
-            </p>
-          </div>
-        </div>
-      </section>
+      <ProfileSection />
+
+      {/* YouTube Section */}
+      <YouTubeSection />
 
       {/* Blog Section */}
       <section className="py-20 bg-black">
