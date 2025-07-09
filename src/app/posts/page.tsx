@@ -13,7 +13,9 @@ export default async function BlogIndexPage({ searchParams }: { searchParams: { 
   
   // カテゴリーでフィルタリング
   const filteredPosts = selectedCategory 
-    ? posts.filter((post: Post) => post.category?.slug === selectedCategory)
+    ? posts.filter((post: Post) => {
+        return post.category && post.category.slug === selectedCategory;
+      })
     : posts;
 
   // パンくずリストのアイテム
