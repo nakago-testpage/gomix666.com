@@ -14,10 +14,10 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-emerald-900/40 text-white z-50 h-12 shadow-md shadow-emerald-500/20 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 w-full bg-emerald-900/40 text-white z-[100] h-12 shadow-md shadow-emerald-500/20 backdrop-blur-sm">
       <div className="container mx-auto flex h-full justify-between items-center px-4">
         <div className="flex items-center gap-4">
-          <Link href="/"><DockText>gomix666.com</DockText></Link>
+          <Link href="/?full=true"><DockText>gomix666.com</DockText></Link>
           <HeaderIcon />
         </div>
         
@@ -55,7 +55,7 @@ export default function Header() {
       
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-12 left-0 w-full bg-gray-900/95 backdrop-blur-md py-4 px-4 shadow-lg shadow-cyan-900/30 border-t border-cyan-900/30 z-50">
+        <div className="md:hidden absolute top-12 left-0 w-full bg-gray-900/95 backdrop-blur-md py-4 px-4 shadow-lg shadow-cyan-900/30 border-t border-cyan-900/30 z-[90]">
           <nav className="flex flex-col gap-4">
             <Link 
               href="/posts" 

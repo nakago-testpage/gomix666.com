@@ -43,15 +43,18 @@ export default async function PostPage({ params }: { params: { slug: string } })
 
   const breadcrumbItems: { title: string; href?: string }[] = [
     { title: 'Home', href: `/` },
+    { title: 'Blog', href: `/posts` },
   ];
   if (post.category) {
-    breadcrumbItems.push({ title: post.category.title, href: `/categories/${post.category.slug}` });
+    breadcrumbItems.push({ title: post.category.title, href: `/posts?category=${post.category.slug}` });
   }
   breadcrumbItems.push({ title: post.title });
 
   return (
-    <article className="max-w-3xl mx-auto">
-      <Breadcrumbs items={breadcrumbItems} />
+    <article className="max-w-3xl mx-auto pt-16">
+      <div className="mb-6 mt-4">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
       <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">{post.title}</h1>
       <div className="flex items-center space-x-4 mb-8 text-gray-400">
         {post.author?.image && (
