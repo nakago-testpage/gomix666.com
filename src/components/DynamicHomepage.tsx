@@ -4,7 +4,6 @@ import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, Torus, Html, Stars } from '@react-three/drei';
 import * as THREE from 'three';
-import FloatingText from './FloatingText';
 
 // --- Background Component: Cosmic Ocean ---
 function CosmicOceanBackground() {
@@ -170,6 +169,30 @@ function DomainNameRing() {
   );
 }
 
+// --- Floating Text Component ---
+function FloatingTextComponent({ text }: { text: string }) {
+  const ref = useRef<HTMLDivElement>(null!);
+  
+  return (
+    <div
+      ref={ref}
+      style={{
+        color: '#00ffff',
+        textShadow: '0 0 5px #00ffff, 0 0 10px #00ffff',
+        fontFamily: '"Courier New", Courier, monospace',
+        fontSize: 'clamp(0.75rem, 2vw, 1rem)',
+        whiteSpace: 'pre-line',
+        pointerEvents: 'none',
+        maxWidth: '300px',
+        transform: 'scale(1)',
+        transformOrigin: 'center center',
+      }}
+    >
+      {text}
+    </div>
+  );
+}
+
 // --- Main Component ---
 export default function DynamicHomepage() {
   return (
@@ -182,25 +205,28 @@ export default function DynamicHomepage() {
           {/* Stars Background */}
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
-          {/* Main Site Title */}
-          <Html position={[0, 2.5, 0]} center>
+          {/* Main Site Title - Responsive */}
+          <Html position={[0, 2.5, 0]} center transform occlude>
             <div
               style={{
                 color: 'white',
                 textShadow: '0 0 8px cyan, 0 0 15px cyan',
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: '2.5rem',
+                fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
+                transform: 'scale(1)',
+                transformOrigin: 'center center',
               }}
             >
               gomix666.com
             </div>
           </Html>
           
-          {/* Floating Text */}
-          <Html position={[-18, 10, 0]}>
-            <FloatingText text={`幸せになりたい
+          {/* Mobile-friendly Floating Text */}
+          <Html position={[-18, 10, 0]} transform occlude distanceFactor={15}>
+            <div className="max-w-xs md:max-w-sm">
+              <FloatingTextComponent text={`幸せになりたい
 人生七転八倒
 
 失敗に次ぐ失敗で借金300万
@@ -213,6 +239,7 @@ export default function DynamicHomepage() {
 
 私の挑戦を
 どうか笑ってやってください`} />
+            </div>
           </Html>
           
           <SolarSystemMonument />
@@ -230,6 +257,23 @@ export default function DynamicHomepage() {
           maxPolarAngle={Math.PI * 2 / 3} 
         />
       </Canvas>
+      
+      {/* Mobile Fallback Text - Only visible on small screens */}
+      <div className="md:hidden absolute inset-0 flex flex-col items-center justify-center text-center p-4 pointer-events-none">
+        <h1 className="text-3xl font-bold text-white text-shadow-cyan mb-4">gomix666.com</h1>
+        <p className="text-cyan-300 text-sm max-w-xs mx-auto">
+          幸せになりたい<br />
+          人生七転八倒<br /><br />
+          失敗に次ぐ失敗で借金300万<br />
+          それでもあきらめられない<br /><br />
+          幸せを勝ち取るために<br />
+          なんでも挑戦<br />
+          投資、副業、<br />
+          そしてブログ？<br /><br />
+          私の挑戦を<br />
+          どうか笑ってやってください
+        </p>
+      </div>
     </div>
   );
 }

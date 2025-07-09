@@ -15,4 +15,12 @@
   .text-glow {
     animation: glowing 1.5s infinite alternate;
   }
+  
+  .text-shadow-cyan {
+    text-shadow: 0 0 8px #00ffff, 0 0 15px #00ffff;
+  }
+  
+  .text-shadow-white {
+    text-shadow: 0 0 8px #ffffff, 0 0 15px #ffffff;
+  }
 }
