@@ -1,9 +1,33 @@
 'use client';
 
-import React, { useRef, useMemo, Suspense } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useMemo, Suspense, useState, useEffect } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Sphere, Torus, Html, Stars } from '@react-three/drei';
 import * as THREE from 'three';
+
+// モバイルデバイスを検出するカスタムフック
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // モバイルデバイスの検出
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobileDevice = /iphone|ipad|ipod|android|blackberry|windows phone|opera mini|silk|mobile/i.test(userAgent);
+      const isSmallScreen = window.innerWidth < 768;
+      setIsMobile(isMobileDevice || isSmallScreen);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+  
+  return isMobile;
+}
 
 // --- Background Component: Cosmic Ocean ---
 function CosmicOceanBackground() {
@@ -213,6 +237,9 @@ function FloatingTextComponent({ text }: { text: string }) {
 
 // --- Main Component ---
 export default function DynamicHomepage() {
+  // モバイルデバイスかどうかを検出
+  const isMobile = useIsMobile();
+  
   return (
     <div className="relative w-full h-screen" style={{ position: 'relative', zIndex: 0, maxHeight: '100vh' }}>
       <Canvas camera={{ position: [5, 3, 15], fov: 60 }}>
@@ -263,18 +290,35 @@ export default function DynamicHomepage() {
           <DomainNameRing />
           <CosmicOceanBackground />
         </Suspense>
-        <OrbitControls 
-          enableZoom={false} 
-          enablePan={false} 
-          autoRotate 
-          autoRotateSpeed={0.05} 
-          minDistance={10} 
-          maxDistance={30} 
-          minPolarAngle={Math.PI / 3} 
-          maxPolarAngle={Math.PI * 2 / 3}
-          // 初期角度を設定
-          initialPosition={[5, 3, 15]}
-        />
+        {/* モバイルデバイスでは操作を無効化、PCでのみ有効 */}
+        {!isMobile && (
+          <OrbitControls 
+            enableZoom={false} 
+            enablePan={false} 
+            autoRotate 
+            autoRotateSpeed={0.05} 
+            minDistance={10} 
+            maxDistance={30} 
+            minPolarAngle={Math.PI / 3} 
+            maxPolarAngle={Math.PI * 2 / 3}
+            // 初期角度を設定
+            initialPosition={[5, 3, 15]}
+          />
+        )}
+        {/* モバイルデバイスでは自動回転のみ有効（操作不可） */}
+        {isMobile && (
+          <OrbitControls 
+            enableZoom={false} 
+            enablePan={false} 
+            enableRotate={false} 
+            autoRotate 
+            autoRotateSpeed={0.05} 
+            minDistance={10} 
+            maxDistance={30}
+            // 初期角度を設定
+            initialPosition={[5, 3, 15]}
+          />
+        )}
       </Canvas>
       
       {/* Floating Text - Visible on all screens */}
