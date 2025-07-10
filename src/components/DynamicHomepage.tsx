@@ -240,9 +240,15 @@ export default function DynamicHomepage() {
   // モバイルデバイスかどうかを検出
   const isMobile = useIsMobile();
   
+  // モバイルデバイスではキャンバスのポインターイベントを無効化
+  const canvasStyle = isMobile ? {
+    pointerEvents: 'none' as const, // モバイルではポインターイベントを無効化
+    touchAction: 'auto' as const, // タッチアクションを有効化
+  } : {};
+
   return (
     <div className="relative w-full h-screen" style={{ position: 'relative', zIndex: 0, maxHeight: '100vh' }}>
-      <Canvas camera={{ position: [5, 3, 15], fov: 60 }}>
+      <Canvas camera={{ position: [5, 3, 15], fov: 60 }} style={canvasStyle}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <Suspense fallback={null}>
