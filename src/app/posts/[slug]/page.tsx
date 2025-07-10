@@ -12,6 +12,27 @@ import { PostMetrics, ShareButtons, BlogYouTubePromo, RelatedPosts } from '@/com
 // キャッシュを無効化して常に最新データを取得
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
+// YouTubeのURLからビデオIDを抽出する関数
+function extractYouTubeId(url?: string): string {
+  if (!url) return 'FKZDa1Doecc'; // デフォルトのビデオID
+  
+  // 完全なURLからIDを抽出
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  
+  if (match && match[2].length === 11) {
+    return match[2];
+  }
+  
+  // URLではなく直接IDが入力されている場合
+  if (url.length === 11) {
+    return url;
+  }
+  
+  return 'FKZDa1Doecc'; // 抽出できない場合はデフォルトのビデオID
+}
 
 async function getPost(slug: string) {
   const query = `*[_type == "post" && slug.current == $slug][0] {
@@ -124,7 +145,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
       
       {/* YouTubeチャンネル紹介 */}
       <Suspense fallback={<div className="h-40 w-full bg-gray-800 animate-pulse rounded-lg my-8"></div>}>
-        <BlogYouTubePromo videoId={post.youtubeUrl} />
+        <BlogYouTubePromo videoId={extractYouTubeId(post.youtubeUrl)} />
       </Suspense>
       
       {/* 関連記事 */}

@@ -1,6 +1,7 @@
 'use client';
 
-import { FaTwitter, FaFacebook, FaLink } from 'react-icons/fa';
+import { FaFacebook, FaLink } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { useState } from 'react';
 
 interface ShareButtonsProps {
@@ -35,7 +36,7 @@ export default function ShareButtons({ title, url }: ShareButtonsProps) {
           className="flex items-center justify-center w-12 h-12 rounded-full bg-[#1DA1F2] text-white hover:opacity-80 transition-opacity"
           aria-label="Share on Twitter"
         >
-          <FaTwitter size={20} />
+          <FaXTwitter size={20} />
         </a>
         <a
           href={facebookUrl}

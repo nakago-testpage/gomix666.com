@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 // キャッシュを無効化して常に最新データを取得
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
 
 export default async function BlogIndexPage({ searchParams }: { searchParams: { category?: string } }) {
   // searchParamsを非同期で処理
