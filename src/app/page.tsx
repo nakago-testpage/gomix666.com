@@ -9,8 +9,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function Home() {
-  const posts = await getPosts();
-  const categories = await getCategories();
+  // データ取得時のエラーハンドリングを追加
+  let posts = [];
+  let categories = [];
+  
+  try {
+    posts = await getPosts();
+    categories = await getCategories();
+    console.log('Posts fetched:', posts?.length || 0);
+    console.log('Categories fetched:', categories?.length || 0);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // エラーが発生した場合は空の配列を使用
+    posts = [];
+    categories = [];
+  }
 
   return (
     <div>
@@ -37,7 +50,7 @@ export default async function Home() {
           {/* カテゴリーフィルター */}
           <div className="mb-12 scroll-fade-in" style={{ animationDelay: '0.2s' }}>
             <div className="flex flex-wrap justify-center gap-3 mb-6">
-              {categories.slice(0, 5).map((category) => (
+              {Array.isArray(categories) && categories.slice(0, 5).map((category) => (
                 <Link 
                   key={category._id} 
                   href={`/posts?category=${category.slug}`}
@@ -50,7 +63,7 @@ export default async function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.slice(0, 6).map((post: Post, index: number) => (
+            {Array.isArray(posts) && posts.slice(0, 6).map((post: Post, index: number) => (
               <Link key={post._id} href={`/posts/${post.slug}`} className={`scroll-fade-in`} style={{ animationDelay: `${0.1 * (index + 1)}s` }}>
                 <div className="bg-gray-900/70 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden hover:shadow-cyan-400/50 transition-all duration-300 h-full flex flex-col border border-cyan-900/30 hover:border-cyan-400">
                   {post.mainImage ? (
