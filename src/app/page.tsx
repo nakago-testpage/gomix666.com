@@ -8,10 +8,9 @@ import { Post } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default async function Home({ searchParams }: { searchParams: { full?: string } }) {
+export default async function Home() {
   const posts = await getPosts();
   const categories = await getCategories();
-  const showFullContent = searchParams.full === 'true';
 
   return (
     <div>
@@ -20,16 +19,18 @@ export default async function Home({ searchParams }: { searchParams: { full?: st
         <DynamicHomepage />
       </section>
 
-      {/* Profile Section - 常に表示 */}
+      {/* 常に表示するように修正 */}
+      {/* Profile Section */}
       <ProfileSection />
 
-      {/* YouTube Section - 常に表示 */}
+      {/* YouTube Section */}
       <YouTubeSection />
 
       {/* Twitter Feed Section removed */}
 
       {/* Blog Section */}
-      <section className="py-20 bg-black/60 backdrop-blur-sm">
+      
+        <section className="py-20 bg-black/60 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-8 text-white scroll-fade-in">Blog</h2>
           

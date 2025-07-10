@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ShootingStarCursor from "@/components/ShootingStarCursor";
 import StarrySky from '@/components/StarrySky';
+import ScrollAnimation from '@/components/ScrollAnimation';
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={`${notoSansJp.className} bg-black text-white`}>
         <StarrySky />
         <ShootingStarCursor />
+        <ScrollAnimation />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">{children}</main>

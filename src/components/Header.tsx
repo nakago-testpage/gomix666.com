@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import HeaderIcon from './HeaderIcon';
 import DockText from './DockText';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaSun } from 'react-icons/fa';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,8 +16,10 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full bg-emerald-900/40 text-white z-[100] h-12 shadow-md shadow-emerald-500/20 backdrop-blur-sm">
       <div className="container mx-auto flex h-full justify-between items-center px-4">
         <div className="flex items-center gap-4">
-          <Link href="/?full=true"><DockText>gomix666.com</DockText></Link>
-          <HeaderIcon />
+          <Link href="/"><DockText>gomix666.com</DockText></Link>
+          <div className="animate-spin-slow ml-1">
+            <FaSun size={18} className="text-black filter drop-shadow-glow-cyan" />
+          </div>
         </div>
         
         {/* Desktop Navigation */}

@@ -8,7 +8,12 @@ export async function getPosts(): Promise<Post[]> {
     "slug": slug.current,
     "excerpt": excerpt.ja,
     mainImage,
-    publishedAt
+    publishedAt,
+    "category": categories[0]->{
+      _id,
+      "title": title.ja,
+      "slug": slug.current
+    }
   }`;
   const posts = await client.fetch<Post[]>(query);
   return posts;

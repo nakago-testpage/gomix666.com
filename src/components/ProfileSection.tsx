@@ -10,14 +10,14 @@ const gomixLogoBase64 = '/images/gomix-logo.png';
 
 const ProfileSection: React.FC = () => {
   return (
-    <section id="profile" className="py-20 bg-gray-900">
+    <section id="profile" className="py-20 bg-transparent">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 text-cyan-300">Profile</h2>
+        <h2 className="text-4xl font-bold text-center mb-12 text-cyan-300 scroll-fade-in">Profile</h2>
         
         <div className="flex flex-col gap-8">
           {/* Profile Info */}
-          <div className="w-full max-w-3xl mx-auto">
-            <div className="bg-black bg-opacity-50 p-8 rounded-lg border border-emerald-800 h-full">
+          <div className="w-full max-w-3xl mx-auto scroll-fade-in">
+            <div className="bg-black/50 backdrop-blur-sm p-8 rounded-lg border border-emerald-800/50 h-full shadow-lg shadow-emerald-500/20">
               <div className="flex flex-col md:flex-row items-center mb-6">
                 <div className="w-32 h-32 rounded-full overflow-hidden mb-4 md:mb-0 md:mr-6 border-4 border-cyan-500 shadow-lg shadow-cyan-500/50">
                   <img 
@@ -55,7 +55,7 @@ const ProfileSection: React.FC = () => {
               
               <div className="space-y-4">
                 <div>
-                  <p className="text-white text-base leading-relaxed">専門卒→就職失敗→ネットワークビジネス失敗→うつ→高額商材300万で自己破産😱→水商売に再就職も失敗→コロナで休業→リボ払い300万で債務整理中😓マイナス300万→残り225万円。ポイ活、投資、仮想通貨で再起を目指す⤴️</p>
+                  <p className="text-white text-base leading-relaxed">AI音楽クリエイター「Shamanic Drive」として活動中。エスニックトランスをAIで制作。X（旧Twitter）とYouTubeで新曲をリリース中。お問い合わせはContactフォームからどうぞ。</p>
                 </div>
               </div>
             </div>

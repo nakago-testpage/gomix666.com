@@ -107,8 +107,9 @@ function Planet({ position, size, color, speed, orbitRadius }: {
 }
 
 function SolarSystemMonument() {
+  // 初期角度を設定して立体的に見せる
   return (
-    <group position={[0, 0, 0]}>
+    <group position={[0, 0, 0]} rotation={[Math.PI / 6, Math.PI / 4, 0]}>
       {/* Sun - glowing center */}
       <Sphere args={[1, 32, 32]}>
         <meshBasicMaterial color="#00ffcc" wireframe />
@@ -149,8 +150,10 @@ function DomainNameRing() {
     ref.current.position.set(x, 0, z);
   });
   
+  // サイト名の重複を避けるため、表示しない
   return (
     <group ref={ref}>
+      {/* サイト名の重複を避けるためコメントアウト
       <Html center>
         <div
           style={{
@@ -165,6 +168,7 @@ function DomainNameRing() {
           gomix666.com
         </div>
       </Html>
+      */}
     </group>
   );
 }
@@ -173,22 +177,36 @@ function DomainNameRing() {
 function FloatingTextComponent({ text }: { text: string }) {
   const ref = useRef<HTMLDivElement>(null!);
   
+  // テキストを行ごとに分割
+  const lines = text.split('\n');
+  
   return (
     <div
       ref={ref}
       style={{
         color: '#00ffff',
-        textShadow: '0 0 5px #00ffff, 0 0 10px #00ffff',
         fontFamily: '"Courier New", Courier, monospace',
-        fontSize: 'clamp(0.75rem, 2vw, 1rem)',
-        whiteSpace: 'pre-line',
+        fontSize: 'clamp(0.6rem, 1.5vw, 0.9rem)',
         pointerEvents: 'none',
-        maxWidth: '300px',
+        maxWidth: '400px',
         transform: 'scale(1)',
         transformOrigin: 'center center',
+        lineHeight: '1.3',
+        letterSpacing: '0.01em'
       }}
     >
-      {text}
+      {lines.map((line, index) => (
+        <div 
+          key={index}
+          className={line.trim() === '' ? 'h-3' : 'floating-text-line'}
+          style={{
+            textShadow: '0 0 5px #00ffff, 0 0 10px #00ffff',
+            animation: line.trim() === '' ? 'none' : `floatIn 1.5s ease-out ${index * 0.4}s both`
+          }}
+        >
+          {line}
+        </div>
+      ))}
     </div>
   );
 }
@@ -196,12 +214,11 @@ function FloatingTextComponent({ text }: { text: string }) {
 // --- Main Component ---
 export default function DynamicHomepage() {
   return (
-    <div className="fixed top-0 left-0 w-full h-screen -z-10">
-      <Canvas camera={{ position: [0, 5, 18], fov: 75 }}>
+    <div className="relative w-full h-screen" style={{ position: 'relative', zIndex: 0, maxHeight: '100vh' }}>
+      <Canvas camera={{ position: [5, 3, 15], fov: 60 }}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
         <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
-          <pointLight color="#ffffff" intensity={1} distance={100} />
-          
           {/* Stars Background */}
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
@@ -223,9 +240,9 @@ export default function DynamicHomepage() {
             </div>
           </Html>
           
-          {/* Mobile-friendly Floating Text */}
-          <Html position={[-18, 10, 0]} transform occlude distanceFactor={15}>
-            <div className="max-w-xs md:max-w-sm">
+          {/* 3Dテキスト表示は無効化 */}
+          {/* <Html position={[-15, 5, 0]} transform={false} occlude distanceFactor={18}>
+            <div className="max-w-md md:max-w-lg">
               <FloatingTextComponent text={`幸せになりたい
 人生七転八倒
 
@@ -240,7 +257,7 @@ export default function DynamicHomepage() {
 私の挑戦を
 どうか笑ってやってください`} />
             </div>
-          </Html>
+          </Html> */}
           
           <SolarSystemMonument />
           <DomainNameRing />
@@ -254,25 +271,44 @@ export default function DynamicHomepage() {
           minDistance={10} 
           maxDistance={30} 
           minPolarAngle={Math.PI / 3} 
-          maxPolarAngle={Math.PI * 2 / 3} 
+          maxPolarAngle={Math.PI * 2 / 3}
+          // 初期角度を設定
+          initialPosition={[5, 3, 15]}
         />
       </Canvas>
       
-      {/* Mobile Fallback Text - Only visible on small screens */}
-      <div className="md:hidden absolute inset-0 flex flex-col items-center justify-center text-center p-4 pointer-events-none">
-        <h1 className="text-3xl font-bold text-white text-shadow-cyan mb-4">gomix666.com</h1>
-        <p className="text-cyan-300 text-sm max-w-xs mx-auto">
-          幸せになりたい<br />
-          人生七転八倒<br /><br />
-          失敗に次ぐ失敗で借金300万<br />
-          それでもあきらめられない<br /><br />
-          幸せを勝ち取るために<br />
-          なんでも挑戦<br />
-          投資、副業、<br />
-          そしてブログ？<br /><br />
-          私の挑戦を<br />
-          どうか笑ってやってください
-        </p>
+      {/* Floating Text - Visible on all screens */}
+      <div className="absolute inset-0 flex flex-col items-start justify-start pt-16 px-4 pointer-events-none z-10">
+        {/* サイト名の重複を避けるため削除 */}
+        <div className="p-4 max-w-[280px] ml-4">
+          <div className="text-cyan-300 text-sm mx-auto text-shadow-cyan font-medium">
+            {[
+              '幸せになりたい',
+              '人生七転八倒',
+              '',
+              '失敗に次ぐ失敗で借金300万',
+              'それでもあきらめられない',
+              '',
+              '幸せを勝ち取るために',
+              'なんでも挑戦',
+              '投資、副業、',
+              'そしてブログ？',
+              '',
+              '私の挑戦を',
+              'どうか笑ってやってください'
+            ].map((line, index) => (
+              <div 
+                key={index} 
+                className={line === '' ? 'h-2' : 'floating-text-line'}
+                style={{
+                  animation: line === '' ? 'none' : `floatIn 1.5s ease-out ${index * 0.4}s both`
+                }}
+              >
+                {line}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

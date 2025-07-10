@@ -7,16 +7,49 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { Suspense } from 'react';
 
 export default async function BlogIndexPage({ searchParams }: { searchParams: { category?: string } }) {
-  const posts = await getPosts();
-  const categories = await getCategories();
-  const selectedCategory = searchParams.category || '';
+  // searchParamsを非同期で処理
+  const { category } = searchParams;
+  let posts: Post[] = [];
+  let categories: any[] = [];
+  let filteredPosts: Post[] = [];
+  let selectedCategory = '';
   
-  // カテゴリーでフィルタリング
-  const filteredPosts = selectedCategory 
-    ? posts.filter((post: Post) => {
-        return post.category && post.category.slug === selectedCategory;
-      })
-    : posts;
+  console.log('Fetching posts and categories...');
+  try {
+    posts = await getPosts();
+    categories = await getCategories();
+    selectedCategory = category || '';
+    
+    // データ取得結果をデバッグ
+    console.log('Posts fetched:', posts);
+    console.log('Categories fetched:', categories);
+    console.log('Selected category:', selectedCategory);
+    console.log('Posts before filtering:', posts?.length || 0);
+    
+    // postsが配列でない場合の対応
+    if (!Array.isArray(posts)) {
+      console.error('Posts is not an array:', posts);
+      return {
+        notFound: true
+      };
+    }
+    
+    filteredPosts = selectedCategory 
+      ? posts.filter((post: Post) => {
+          const hasCategory = post?.category && post.category.slug === selectedCategory;
+          console.log(`Post ${post?.title || 'unknown'} has matching category: ${hasCategory}`);
+          return hasCategory;
+        })
+      : posts;
+      
+    console.log('Posts after filtering:', filteredPosts?.length || 0);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // エラーが発生した場合は空の配列を使用
+    posts = [];
+    categories = [];
+    filteredPosts = [];
+  }
 
   // パンくずリストのアイテム
   const breadcrumbItems = [

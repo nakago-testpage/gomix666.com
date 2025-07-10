@@ -84,10 +84,10 @@ const Scene = () => {
 
 const HeaderIcon = () => {
   return (
-    <div className="w-full h-64">
-      <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
-        <ambientLight intensity={0.1} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
+    <div className="w-10 h-10 block" style={{ marginLeft: '4px', marginRight: '4px' }}>
+      <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
+        <ambientLight intensity={0.2} />
+        <directionalLight position={[5, 5, 5]} intensity={1.5} />
         <Scene />
       </Canvas>
     </div>
