@@ -6,6 +6,10 @@ import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Suspense } from 'react';
 
+// キャッシュを無効化して常に最新データを取得
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function BlogIndexPage({ searchParams }: { searchParams: { category?: string } }) {
   // searchParamsを非同期で処理
   const { category } = searchParams;
@@ -79,14 +83,21 @@ export default async function BlogIndexPage({ searchParams }: { searchParams: { 
       {/* カテゴリーフィルター */}
       <div className="mb-12">
         <div className="flex flex-wrap justify-center gap-3 mb-6">
-          <Link href="/posts" className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!selectedCategory ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/30' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
+          <Link 
+            href="/posts" 
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${!selectedCategory ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/30' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
+            prefetch={true} // プリフェッチを有効化
+            scroll={true} // スクロールを有効化
+          >
             All Posts
           </Link>
-          {categories.map((category) => (
+          {Array.isArray(categories) && categories.map((category) => (
             <Link 
               key={category._id} 
               href={`/posts?category=${category.slug}`}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedCategory === category.slug ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/30' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
+              prefetch={true} // プリフェッチを有効化
+              scroll={true} // スクロールを有効化
             >
               {category.title}
             </Link>
@@ -103,8 +114,14 @@ export default async function BlogIndexPage({ searchParams }: { searchParams: { 
       
       {/* 記事一覧 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredPosts.map((post: Post) => (
-          <Link key={post._id} href={`/posts/${post.slug}`} className="scroll-fade-in">
+        {Array.isArray(filteredPosts) && filteredPosts.map((post: Post) => (
+          <Link 
+            key={post._id} 
+            href={`/posts/${post.slug}`} 
+            className="scroll-fade-in"
+            prefetch={true} // プリフェッチを有効化
+            scroll={true} // スクロールを有効化
+          >
             <div className="bg-gray-900/70 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden hover:shadow-cyan-400/50 transition-all duration-300 h-full flex flex-col border border-gray-800/50 hover:border-cyan-400">
               {post.mainImage ? (
                 <div className="w-full h-48 relative">

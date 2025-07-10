@@ -8,5 +8,11 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion, 
-  useCdn: true, // set to `false` to bypass the edge cache
+  useCdn: false, // CDNキャッシュを無効化して常に最新データを取得
+  perspective: 'published',
+  stega: {
+    enabled: false,
+  },
+  // リクエストタイムアウトを増やす
+  token: process.env.SANITY_API_TOKEN, // 認証トークンがあれば使用
 })
