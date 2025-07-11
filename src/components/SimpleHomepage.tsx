@@ -560,10 +560,23 @@ export default function SimpleHomepage() {
     };
   }, [glowIntensity, logoPosition, noiseOffset, glitchIntensity]);
 
+  // 画面幅を検出してモバイルかどうかを判断
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    <div className="w-full h-screen">
+    <div className={`w-full ${isMobile ? '' : 'h-screen'}`}>
       <Canvas
-        camera={{ position: [0, 0, 15], fov: 60 }}
+        camera={{ position: [0, 2, 15], fov: 60 }}
         gl={{ antialias: true }}
       >
         <color attach="background" args={[backgroundColor]} />
@@ -584,13 +597,16 @@ export default function SimpleHomepage() {
           enableZoom={false} 
           enablePan={false}
           rotateSpeed={0.5}
-          autoRotate
+          autoRotate={!isMobile}
           autoRotateSpeed={0.5}
+          // 初期角度を設定（X軸周りに15度傾ける）
+          minPolarAngle={Math.PI / 2 - 0.3} // 約15度上から見る
+          maxPolarAngle={Math.PI / 2 - 0.3} // 角度を固定
         />
       </Canvas>
       
       {/* オーバーレイテキスト - 動的に動くロゴ（ノイズ/ブラー効果付き） */}
-      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
+      <div className={`absolute top-0 left-0 w-full ${isMobile ? 'h-screen' : 'h-full'} flex items-center justify-center ${isMobile ? '' : 'pointer-events-none'}`}>
         <div className="text-center">
           <div className="relative">
             {/* グリッチ効果のためのクローン要素（少しずれた位置に表示） */}
