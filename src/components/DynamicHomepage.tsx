@@ -131,9 +131,15 @@ function Planet({ position, size, color, speed, orbitRadius }: {
 }
 
 function SolarSystemMonument() {
+  // モバイルデバイスかどうかを検出
+  const isMobile = useIsMobile();
+  
+  // モバイル表示時はオブジェクトを大きくする
+  const scale = isMobile ? 1.5 : 1.0; // モバイルでは1.5倍に拡大
+  
   // 初期角度を設定して立体的に見せる
   return (
-    <group position={[0, 0, 0]} rotation={[Math.PI / 6, Math.PI / 4, 0]}>
+    <group position={[0, 0, 0]} rotation={[Math.PI / 6, Math.PI / 4, 0]} scale={scale}>
       {/* Sun - glowing center */}
       <Sphere args={[1, 32, 32]}>
         <meshBasicMaterial color="#00ffcc" wireframe />
@@ -246,26 +252,31 @@ export default function DynamicHomepage() {
     touchAction: 'auto' as const, // タッチアクションを有効化
   } : {};
 
+  // モバイル表示時のカメラ位置とFOVを調整
+  const cameraSettings = isMobile 
+    ? { position: [0, 0, 20] as [number, number, number], fov: 50 } // モバイル用：より遠くから見る
+    : { position: [5, 3, 15] as [number, number, number], fov: 60 }; // PC用：従来の設定
+
   return (
     <div className="relative w-full h-screen" style={{ position: 'relative', zIndex: 0, maxHeight: '100vh' }}>
-      <Canvas camera={{ position: [5, 3, 15], fov: 60 }} style={canvasStyle}>
+      <Canvas camera={cameraSettings} style={canvasStyle}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <Suspense fallback={null}>
           {/* Stars Background */}
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
-          {/* Main Site Title - Responsive */}
+          {/* Main Site Title - Responsive - モバイルでは表示サイズを小さく */}
           <Html position={[0, 2.5, 0]} center transform occlude>
             <div
               style={{
                 color: 'white',
                 textShadow: '0 0 8px cyan, 0 0 15px cyan',
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+                fontSize: isMobile ? 'clamp(1rem, 4vw, 1.8rem)' : 'clamp(1.5rem, 5vw, 2.5rem)', // モバイルでは小さく
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: 'scale(1)',
+                transform: isMobile ? 'scale(0.8)' : 'scale(1)', // モバイルでは縮小
                 transformOrigin: 'center center',
               }}
             >
@@ -307,8 +318,7 @@ export default function DynamicHomepage() {
             maxDistance={30} 
             minPolarAngle={Math.PI / 3} 
             maxPolarAngle={Math.PI * 2 / 3}
-            // 初期角度を設定
-            initialPosition={[5, 3, 15]}
+            // 初期位置はカメラ設定で指定するため、ここでは指定しない
           />
         )}
         {/* モバイルデバイスでは自動回転のみ有効（操作不可） */}
@@ -318,11 +328,10 @@ export default function DynamicHomepage() {
             enablePan={false} 
             enableRotate={false} 
             autoRotate 
-            autoRotateSpeed={0.05} 
+            autoRotateSpeed={0.03} // モバイルでは回転速度を遅く
             minDistance={10} 
             maxDistance={30}
-            // 初期角度を設定
-            initialPosition={[5, 3, 15]}
+            // 初期位置はカメラ設定で指定するため、ここでは指定しない
           />
         )}
       </Canvas>
@@ -331,7 +340,7 @@ export default function DynamicHomepage() {
       <div className="absolute inset-0 flex flex-col items-start justify-start pt-16 px-4 pointer-events-none z-10">
         {/* サイト名の重複を避けるため削除 */}
         <div className="p-4 max-w-[280px] ml-4">
-          <div className="text-cyan-300 text-sm mx-auto text-shadow-cyan font-medium">
+          <div className={`text-cyan-300 ${isMobile ? 'text-xs' : 'text-sm'} mx-auto text-shadow-cyan font-medium`}>
             {[
               '幸せになりたい',
               '人生七転八倒',
