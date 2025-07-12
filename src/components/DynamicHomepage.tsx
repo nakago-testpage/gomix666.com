@@ -134,12 +134,15 @@ function SolarSystemMonument() {
   // モバイルデバイスかどうかを検出
   const isMobile = useIsMobile();
   
-  // モバイル表示時はオブジェクトを大きくする
-  const scale = isMobile ? 4.0 : 1.0; // モバイルでは4倍に拡大
+  // モバイル表示時はオブジェクトを大きくするが、サイト名と重なるように調整
+  const scale = isMobile ? 3.0 : 1.0; // モバイルでは3倍に拡大（4倍から調整）
   
   // 初期角度を設定して立体的に見せる
   return (
-    <group position={[0, 0, 0]} rotation={[Math.PI / 6, Math.PI / 4, 0]} scale={scale}>
+    <group 
+      position={isMobile ? [0, -1, 0] : [0, 0, 0]} // モバイル表示時は少し下に配置
+      rotation={[Math.PI / 6, Math.PI / 4, 0]} 
+      scale={scale}>
       {/* Sun - glowing center */}
       <Sphere args={[1, 32, 32]}>
         <meshBasicMaterial color="#00ffcc" wireframe />
@@ -274,13 +277,13 @@ export default function DynamicHomepage() {
           {/* Stars Background */}
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
-          {/* Main Site Title - Responsive - モバイルでは表示サイズを小さく */}
+          {/* Main Site Title - Responsive - モバイルでもPCと同様にオブジェクトと重なるように調整 */}
           <Html 
-            position={isMobile ? [0, 0, 0] : [0, 2.5, 0]} 
+            position={isMobile ? [0, -1, 2] : [0, 2.5, 0]} 
             center 
             transform 
             occlude
-            distanceFactor={isMobile ? 10 : 10} // モバイルでも同じ距離に調整
+            distanceFactor={isMobile ? 6 : 10} // モバイルではより近くに調整
           >
             <div
               style={{
