@@ -135,7 +135,7 @@ function SolarSystemMonument() {
   const isMobile = useIsMobile();
   
   // モバイル表示時はオブジェクトを大きくする
-  const scale = isMobile ? 2.5 : 1.0; // モバイルでは2.5倍に拡大
+  const scale = isMobile ? 4.0 : 1.0; // モバイルでは4倍に拡大
   
   // 初期角度を設定して立体的に見せる
   return (
@@ -254,11 +254,19 @@ export default function DynamicHomepage() {
 
   // モバイル表示時のカメラ位置とFOVを調整
   const cameraSettings = isMobile 
-    ? { position: [0, 0, 15] as [number, number, number], fov: 45 } // モバイル用：より近くから見る、視野角を狭く
+    ? { position: [0, 0, 10] as [number, number, number], fov: 40 } // モバイル用：さらに近くから見る、視野角をさらに狭く
     : { position: [5, 3, 15] as [number, number, number], fov: 60 }; // PC用：従来の設定
 
+  // モバイル表示時のスタイル調整
+  const containerStyle = {
+    position: 'relative' as const,
+    zIndex: 0,
+    maxHeight: '100vh',
+    overflow: 'hidden' // オーバーフローを防止
+  };
+
   return (
-    <div className="relative w-full h-screen" style={{ position: 'relative', zIndex: 0, maxHeight: '100vh' }}>
+    <div className="relative w-full h-screen" style={containerStyle}>
       <Canvas camera={cameraSettings} style={canvasStyle}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
@@ -273,10 +281,11 @@ export default function DynamicHomepage() {
                 color: 'white',
                 textShadow: '0 0 8px cyan, 0 0 15px cyan',
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: isMobile ? 'clamp(0.8rem, 3vw, 1.2rem)' : 'clamp(1.5rem, 5vw, 2.5rem)', // モバイルではさらに小さく
+                fontSize: isMobile ? 'clamp(0.5rem, 2vw, 0.8rem)' : 'clamp(1.5rem, 5vw, 2.5rem)', // モバイルではさらに小さく
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: isMobile ? 'scale(0.6)' : 'scale(1)', // モバイルではさらに縮小
+                transform: isMobile ? 'scale(0.4)' : 'scale(1)', // モバイルではさらに縮小
+                opacity: isMobile ? 0.8 : 1, // モバイルでは半透明に
                 transformOrigin: 'center center',
               }}
             >
