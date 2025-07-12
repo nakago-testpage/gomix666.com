@@ -135,7 +135,7 @@ function SolarSystemMonument() {
   const isMobile = useIsMobile();
   
   // モバイル表示時はオブジェクトを大きくする
-  const scale = isMobile ? 1.5 : 1.0; // モバイルでは1.5倍に拡大
+  const scale = isMobile ? 2.5 : 1.0; // モバイルでは2.5倍に拡大
   
   // 初期角度を設定して立体的に見せる
   return (
@@ -254,7 +254,7 @@ export default function DynamicHomepage() {
 
   // モバイル表示時のカメラ位置とFOVを調整
   const cameraSettings = isMobile 
-    ? { position: [0, 0, 20] as [number, number, number], fov: 50 } // モバイル用：より遠くから見る
+    ? { position: [0, 0, 15] as [number, number, number], fov: 45 } // モバイル用：より近くから見る、視野角を狭く
     : { position: [5, 3, 15] as [number, number, number], fov: 60 }; // PC用：従来の設定
 
   return (
@@ -273,10 +273,10 @@ export default function DynamicHomepage() {
                 color: 'white',
                 textShadow: '0 0 8px cyan, 0 0 15px cyan',
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: isMobile ? 'clamp(1rem, 4vw, 1.8rem)' : 'clamp(1.5rem, 5vw, 2.5rem)', // モバイルでは小さく
+                fontSize: isMobile ? 'clamp(0.8rem, 3vw, 1.2rem)' : 'clamp(1.5rem, 5vw, 2.5rem)', // モバイルではさらに小さく
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: isMobile ? 'scale(0.8)' : 'scale(1)', // モバイルでは縮小
+                transform: isMobile ? 'scale(0.6)' : 'scale(1)', // モバイルではさらに縮小
                 transformOrigin: 'center center',
               }}
             >
