@@ -279,11 +279,11 @@ export default function DynamicHomepage() {
           
           {/* Main Site Title - Responsive - モバイルでもPCと同様にオブジェクトと重なるように調整 */}
           <Html 
-            position={isMobile ? [0, -1, 2] : [0, 2.5, 0]} 
+            position={isMobile ? [0, 0, 0] : [0, 2.5, 0]} 
             center 
             transform 
             occlude
-            distanceFactor={isMobile ? 6 : 10} // モバイルではより近くに調整
+            distanceFactor={isMobile ? 4 : 10} // モバイルではさらに近くに調整
           >
             <div
               style={{
@@ -298,11 +298,11 @@ export default function DynamicHomepage() {
                   0 0 120px rgba(0, 255, 255, 0.3)
                 `,
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: isMobile ? 'clamp(1.2rem, 4vw, 1.8rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // サイズを大きく調整
+                fontSize: isMobile ? 'clamp(0.7rem, 3vw, 1.2rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // モバイルではより小さく調整
                 fontWeight: 'bold',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: isMobile ? 'scale(0.8)' : 'scale(1)', // モバイルでもあまり小さくしない
+                transform: isMobile ? 'scale(0.6)' : 'scale(1)', // モバイルではより小さくスケールを調整
                 opacity: 1, // 完全に不透明にして目立たせる
                 transformOrigin: 'center center',
                 animation: 'textGlow 2s infinite alternate, textFlicker 5s infinite',
