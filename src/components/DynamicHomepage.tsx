@@ -276,38 +276,43 @@ export default function DynamicHomepage() {
           
           {/* Main Site Title - Responsive - モバイルでは表示サイズを小さく */}
           <Html 
-            position={isMobile ? [0, 6, 0] : [0, 2.5, 0]} 
+            position={isMobile ? [0, 0, 0] : [0, 2.5, 0]} 
             center 
             transform 
             occlude
-            distanceFactor={isMobile ? 15 : 10} // モバイルではさらに距離を取る
+            distanceFactor={isMobile ? 10 : 10} // モバイルでも同じ距離に調整
           >
             <div
               style={{
-                color: 'white',
+                color: '#00ffff',
                 textShadow: `
-                  0 0 10px cyan, 
-                  0 0 20px cyan, 
-                  0 0 30px cyan, 
-                  0 0 40px rgba(0, 255, 255, 0.5), 
-                  0 0 70px rgba(0, 255, 255, 0.3), 
-                  0 0 80px rgba(0, 255, 255, 0.2)
+                  0 0 15px #00ffff, 
+                  0 0 25px #00ffff, 
+                  0 0 35px #00ffff, 
+                  0 0 45px rgba(0, 255, 255, 0.7), 
+                  0 0 75px rgba(0, 255, 255, 0.5), 
+                  0 0 95px rgba(0, 255, 255, 0.4),
+                  0 0 120px rgba(0, 255, 255, 0.3)
                 `,
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: isMobile ? 'clamp(0.5rem, 2vw, 0.8rem)' : 'clamp(1.5rem, 5vw, 2.5rem)', // モバイルではさらに小さく
+                fontSize: isMobile ? 'clamp(1.2rem, 4vw, 1.8rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // サイズを大きく調整
+                fontWeight: 'bold',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: isMobile ? 'scale(0.4)' : 'scale(1)', // モバイルではさらに縮小
-                opacity: isMobile ? 0.85 : 1, // モバイルでは半透明に
+                transform: isMobile ? 'scale(0.8)' : 'scale(1)', // モバイルでもあまり小さくしない
+                opacity: 1, // 完全に不透明にして目立たせる
                 transformOrigin: 'center center',
-                animation: 'textGlow 3s infinite alternate',
-                letterSpacing: '0.05em',
-                padding: '0.5em 1em',
+                animation: 'textGlow 2s infinite alternate, textFlicker 5s infinite',
+                letterSpacing: '0.1em',
+                padding: '0.8em 1.2em',
                 position: 'relative',
+                WebkitTextStroke: '1px rgba(0, 255, 255, 0.5)', // テキストの外柄を追加
+                filter: 'drop-shadow(0 0 10px rgba(0, 255, 255, 0.8))', // ドロップシャドウを追加
               }}
             >
               gomix666.com
-              {/* ノイズエフェクトを追加する要素 */}
+              
+              {/* ノイズエフェクトを強化 */}
               <div 
                 style={{
                   position: 'absolute',
@@ -315,13 +320,50 @@ export default function DynamicHomepage() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\' /%3E%3CfeColorMatrix type=\'matrix\' values=\'1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.5 0\' /%3E%3C/filter%3E%3Crect width=\'100%\' height=\'100%\' filter=\'url(%23noiseFilter)\' /%3E%3C/svg%3E")',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'5\' stitchTiles=\'stitch\' /%3E%3CfeColorMatrix type=\'matrix\' values=\'1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0\' /%3E%3C/filter%3E%3Crect width=\'100%\' height=\'100%\' filter=\'url(%23noiseFilter)\' /%3E%3C/svg%3E")',
                   backgroundSize: 'cover',
-                  opacity: 0.15,
+                  opacity: 0.4, // 不透明度を上げる
                   mixBlendMode: 'overlay',
                   pointerEvents: 'none',
+                  animation: 'noiseShift 3s infinite linear',
                 }}
               />
+              
+              {/* グリッチエフェクトを追加 */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '2px',
+                  left: '-2px',
+                  right: 0,
+                  bottom: 0,
+                  color: '#ff00ff',
+                  opacity: 0.5,
+                  pointerEvents: 'none',
+                  animation: 'glitchEffect 4s infinite alternate',
+                  clipPath: 'polygon(0 15%, 100% 15%, 100% 30%, 0 30%, 0 45%, 100% 45%, 100% 75%, 0 75%)',
+                }}
+              >
+                gomix666.com
+              </div>
+              
+              {/* 赤のグリッチエフェクト */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '-2px',
+                  left: '2px',
+                  right: 0,
+                  bottom: 0,
+                  color: '#ff0000',
+                  opacity: 0.5,
+                  pointerEvents: 'none',
+                  animation: 'glitchEffect2 3s infinite alternate-reverse',
+                  clipPath: 'polygon(0 10%, 100% 10%, 100% 25%, 0 25%, 0 40%, 100% 40%, 100% 65%, 0 65%)',
+                }}
+              >
+                gomix666.com
+              </div>
             </div>
           </Html>
           
