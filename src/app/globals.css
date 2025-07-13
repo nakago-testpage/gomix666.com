@@ -33,9 +33,322 @@ body {
       transform: translateY(0);
     }
   }
+  
+  /* サイト名のサイバーパンク風スタイル - 強化版 */
+  .site-name-cyberpunk {
+    font-family: var(--font-vt323), "Courier New", monospace;
+    color: #ffffff;
+    text-shadow: 
+      0 0 5px #00ffff, 
+      0 0 10px #00ffff, 
+      0 0 15px #00ffff, 
+      0 0 20px #00ffff, 
+      0 0 35px #00ffff, 
+      0 0 40px #00ffff, 
+      0 0 50px rgba(0, 255, 255, 0.7), 
+      0 0 75px rgba(0, 255, 255, 0.5);
+    position: relative;
+    animation: textGlow 1s infinite, textFlicker 2s infinite, textBroken 8s infinite;
+    letter-spacing: 0.15em;
+    padding: 0.5em 0.8em;
+    -webkit-text-stroke: 1px rgba(0, 255, 255, 0.9);
+    font-weight: bold;
+    mix-blend-mode: screen;
+    z-index: 10;
+    filter: blur(0.7px);
+  }
+  
+  /* グリッチオーバーレイ */
+  .glitch-overlay-purple {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 0, 255, 0.8);
+    animation: glitchEffect 2s infinite;
+    text-shadow: 2px 0 rgba(255, 0, 255, 0.8), -2px 0 rgba(0, 255, 255, 0.8);
+    z-index: 5;
+    font-weight: bold;
+  }
+  
+  .glitch-overlay-red {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: rgba(255, 0, 0, 0.8);
+    animation: glitchEffect2 2.5s infinite;
+    text-shadow: -2px 0 rgba(255, 0, 0, 0.8), 2px 0 rgba(0, 255, 255, 0.8);
+    z-index: 4;
+    font-weight: bold;
+  }
+  
+  /* ノイズオーバーレイ */
+  .noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    animation: noiseShift 3s infinite;
+    z-index: 5;
+  }
+  
+  /* 水平グリッチライン */
+  .horizontal-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(0, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    animation: horizontalGlitch 7s infinite;
+    z-index: 6;
+  }
+  
+  /* 点滅オーバーレイ */
+  .flicker-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 255, 0.2);
+    animation: flickerOn 10s infinite;
+    z-index: 4;
+    pointer-events: none;
+  }
+  
+  /* 電光掲示板風エフェクト */
+  @keyframes textGlow {
+    0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+    25% { text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff, 0 0 35px #00ffff, 0 0 45px rgba(0, 255, 255, 0.8); }
+    50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff, 0 0 80px rgba(0, 255, 255, 0.7); }
+    75% { text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff, 0 0 35px #00ffff, 0 0 45px rgba(0, 255, 255, 0.8); }
+    100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+  }
+  
+  @keyframes textFlicker {
+    0% { opacity: 1; }
+    2% { opacity: 0.6; }
+    3% { opacity: 0.9; }
+    4% { opacity: 0.2; }
+    6% { opacity: 1; }
+    7% { opacity: 0.6; }
+    8% { opacity: 1; }
+    9% { opacity: 0.9; }
+    10% { opacity: 0.7; }
+    20% { opacity: 1; }
+    50% { opacity: 0.5; }
+    60% { opacity: 0.7; }
+    70% { opacity: 1; }
+    71% { opacity: 0.5; }
+    72% { opacity: 0.9; }
+    74% { opacity: 1; }
+    78% { opacity: 0.7; }
+    80% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  
+  @keyframes noiseShift {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -5%); }
+    20% { transform: translate(3%, 7%); }
+    30% { transform: translate(7%, -3%); }
+    40% { transform: translate(-5%, 5%); }
+    50% { transform: translate(5%, 5%); }
+    60% { transform: translate(7%, -7%); }
+    70% { transform: translate(-3%, 3%); }
+    80% { transform: translate(1%, -1%); }
+    90% { transform: translate(-1%, 3%); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  @keyframes glitchEffect {
+    0% { transform: translate(0); opacity: 0.8; }
+    10% { transform: translate(-5px, 2px); opacity: 0.9; }
+    20% { transform: translate(-3px, 3px); opacity: 0.8; }
+    30% { transform: translate(0, -2px); opacity: 1; }
+    40% { transform: translate(-3px, -3px); opacity: 0.9; }
+    50% { transform: translate(3px, 0); opacity: 0.7; }
+    60% { transform: translate(3px, 3px); opacity: 0.9; }
+    70% { transform: translate(0, 5px); opacity: 0.8; }
+    80% { transform: translate(3px, -3px); opacity: 1; }
+    90% { transform: translate(-2px, 2px); opacity: 0.9; }
+    100% { transform: translate(0); opacity: 0.8; }
+  }
+  
+  @keyframes glitchEffect2 {
+    0% { transform: translate(0); opacity: 0.8; }
+    10% { transform: translate(4px, -2px); opacity: 0.7; }
+    20% { transform: translate(3px, 3px); opacity: 0.9; }
+    30% { transform: translate(-2px, 0); opacity: 0.8; }
+    40% { transform: translate(3px, -3px); opacity: 1; }
+    50% { transform: translate(-4px, 2px); opacity: 0.9; }
+    60% { transform: translate(-3px, 3px); opacity: 0.7; }
+    70% { transform: translate(2px, -5px); opacity: 0.8; }
+    80% { transform: translate(-3px, -3px); opacity: 0.9; }
+    90% { transform: translate(3px, 0); opacity: 1; }
+    100% { transform: translate(0); opacity: 0.8; }
+  }
+  
+  @keyframes horizontalGlitch {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { transform: translateX(0); opacity: 0.7; }
+    11% { transform: translateX(30px); opacity: 0.7; }
+    15% { transform: translateX(-20px); opacity: 0.7; }
+    18% { transform: translateX(0); opacity: 0; }
+    20% { opacity: 0; }
+    30% { opacity: 0; }
+    31% { transform: translateX(0); opacity: 0.7; }
+    32% { transform: translateX(-20px); opacity: 0.7; }
+    33% { transform: translateX(0); opacity: 0; }
+    80% { opacity: 0; }
+    85% { transform: translateX(0); opacity: 0.7; }
+    95% { transform: translateX(0); opacity: 0.7; }
+    100% { transform: translateX(0); opacity: 0; }
+  }
+  
+  @keyframes textBroken {
+    0% { clip-path: inset(0 0 0 0); }
+    5% { clip-path: inset(30% 0 20% 0); }
+    5.5% { clip-path: inset(0 0 0 0); }
+    6% { clip-path: inset(10% 0 40% 0); }
+    6.5% { clip-path: inset(0 0 0 0); }
+    7% { clip-path: inset(0 0 0 0); }
+    20% { clip-path: inset(0 0 0 0); }
+    20.5% { clip-path: inset(0 30% 0 10%); }
+    21% { clip-path: inset(0 0 0 0); }
+    92% { clip-path: inset(0 0 0 0); }
+    92.5% { clip-path: inset(40% 10% 0 10%); }
+    93% { clip-path: inset(0 0 0 0); }
+    93.5% { clip-path: inset(10% 0 25% 0); }
+    94% { clip-path: inset(0 0 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+  }
+  
+  @keyframes textBroken {
+    0% { transform: skew(0deg, 0deg); filter: blur(0.7px); }
+    2% { transform: skew(2deg, 1deg); filter: blur(1.2px); }
+    4% { transform: skew(-1deg, 0deg); filter: blur(0.7px); }
+    6% { transform: skew(0deg, 0deg); filter: blur(0.9px); }
+    8% { transform: skew(-2deg, -1deg); filter: blur(1.5px); }
+    10% { transform: skew(0deg, 0deg); filter: blur(0.7px); }
+    50% { transform: skew(0deg, 0deg); filter: blur(0.7px); }
+    52% { transform: skew(3deg, 1deg); filter: blur(1.8px); }
+    54% { transform: skew(0deg, 0deg); filter: blur(0.7px); }
+    56% { transform: skew(-3deg, -1deg); filter: blur(1.2px); }
+    58% { transform: skew(0deg, 0deg); filter: blur(0.7px); }
+    100% { transform: skew(0deg, 0deg); filter: blur(0.7px); }
+  }
+  
+  @keyframes flickerOn {
+    0% { opacity: 0; }
+    10% { opacity: 0; }
+    10.1% { opacity: 0.5; }
+    10.2% { opacity: 0; }
+    20% { opacity: 0; }
+    20.1% { opacity: 0.7; }
+    20.6% { opacity: 0; }
+    30% { opacity: 0; }
+    30.1% { opacity: 0.6; }
+    30.5% { opacity: 0; }
+    90% { opacity: 0; }
+    90.1% { opacity: 0.5; }
+    90.2% { opacity: 0; }
+    100% { opacity: 0; }
+  }
 
   .floating-text-line {
     opacity: 0;
+  }
+  
+  /* サイト名の電光掲示板風スタイル */
+  .site-name-electric {
+    font-family: var(--font-vt323), "Courier New", monospace;
+    color: #ffffff;
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff,
+                0 0 40px rgba(0, 255, 255, 0.8), 0 0 70px rgba(0, 255, 255, 0.6),
+                0 0 95px rgba(0, 255, 255, 0.4), 0 0 120px rgba(0, 255, 255, 0.3);
+    position: relative;
+    animation: textGlow 2s infinite, textFlicker 5s infinite, textBroken 8s infinite;
+    z-index: 10;
+  }
+  
+  .site-name-electric::before,
+  .site-name-electric::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  .site-name-electric::before {
+    color: rgba(255, 0, 255, 0.5);
+    animation: glitchEffect 4s infinite;
+  }
+  
+  .site-name-electric::after {
+    color: rgba(255, 0, 0, 0.5);
+    animation: glitchEffect2 4.5s infinite;
+  }
+  
+  .noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    animation: noiseShift 3s infinite;
+    z-index: 5;
+  }
+  
+  .horizontal-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(0, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    animation: horizontalGlitch 7s infinite;
+    z-index: 6;
+  }
+  
+  .horizontal-glitch:nth-child(2) {
+    top: 30%;
+    animation-delay: 1.5s;
+  }
+  
+  .horizontal-glitch:nth-child(3) {
+    top: 70%;
+    animation-delay: 3s;
+  }
+  
+  .flicker-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 255, 0.2);
+    animation: flickerOn 10s infinite;
+    z-index: 4;
+    pointer-events: none;
   }
   
   /* スクロールアニメーション */

@@ -145,13 +145,13 @@ function SolarSystemMonument() {
   // モバイルデバイスかどうかを検出
   const isMobile = useIsMobile();
   
-  // モバイル表示時はオブジェクトを大きくするが、サイト名と重なるように調整
-  const scale = isMobile ? 2.0 : 1.0; // モバイルでは2.0倍に拡大（2.5倍から調整）
+  // モバイル表示時はオブジェクトをより大きくし、中央に配置
+  const scale = isMobile ? 3.0 : 1.0; // モバイルでは3.0倍に拡大
   
   // 初期角度を設定して立体的に見せる
   return (
     <group 
-      position={isMobile ? [0, -2, 0] : [0, 0, 0]} // モバイル表示時の位置を下に調整
+      position={isMobile ? [0, -0.5, 0] : [0, 0, 0]} // モバイル表示時の位置を中央に調整
       rotation={[Math.PI / 6, Math.PI / 4, 0]} 
       scale={scale}>
       {/* Sun - glowing center */}
@@ -266,9 +266,9 @@ export default function DynamicHomepage() {
     touchAction: 'auto' as const, // タッチアクションを有効化
   } : {};
 
-  // モバイル表示時のカメラ位置とFOVを調整
+  // モバイルとPCでカメラ設定を変更
   const cameraSettings = isMobile 
-    ? { position: [0, 0, 10] as [number, number, number], fov: 40 } // モバイル用：より近くから見る、視野角を広めに
+    ? { position: [0, 0, 8] as [number, number, number], fov: 60 } // モバイル用：より近くから見てオブジェクトを大きく表示、視野角を広めに
     : { position: [5, 3, 15] as [number, number, number], fov: 60 }; // PC用：従来の設定
 
   // モバイル表示時のスタイル調整
@@ -283,6 +283,142 @@ export default function DynamicHomepage() {
     justifyContent: 'center',
     alignItems: 'center'
   };
+  
+  // グローバルスタイルを追加（アニメーション定義）
+  useEffect(() => {
+    // 既存のスタイル要素があれば削除
+    const existingStyle = document.getElementById('dynamic-homepage-styles');
+    if (existingStyle) {
+      existingStyle.remove();
+    }
+    
+    // 新しいスタイル要素を作成
+    const styleEl = document.createElement('style');
+    styleEl.id = 'dynamic-homepage-styles';
+    styleEl.innerHTML = `
+      @keyframes textGlow {
+        0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
+        100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+      }
+      
+      @keyframes textFlicker {
+        0% { opacity: 1; }
+        3% { opacity: 0.8; }
+        6% { opacity: 1; }
+        7% { opacity: 0.4; }
+        8% { opacity: 1; }
+        9% { opacity: 0.9; }
+        10% { opacity: 0.7; }
+        20% { opacity: 1; }
+        50% { opacity: 0.9; }
+        70% { opacity: 1; }
+        73% { opacity: 0; }
+        74% { opacity: 1; }
+        75% { opacity: 0.8; }
+        76% { opacity: 1; }
+        77% { opacity: 0.9; }
+        78% { opacity: 1; }
+        85% { opacity: 0.7; }
+        86% { opacity: 1; }
+        100% { opacity: 0.9; }
+      }
+      
+      @keyframes noiseShift {
+        0% { transform: translate(0, 0); }
+        10% { transform: translate(-5%, -5%); }
+        20% { transform: translate(3%, 7%); }
+        30% { transform: translate(7%, -3%); }
+        40% { transform: translate(-5%, 5%); }
+        50% { transform: translate(5%, 5%); }
+        60% { transform: translate(7%, -7%); }
+        70% { transform: translate(-3%, 3%); }
+        80% { transform: translate(1%, -1%); }
+        90% { transform: translate(-1%, 3%); }
+        100% { transform: translate(0, 0); }
+      }
+      
+      @keyframes glitchEffect {
+        0% { transform: translate(0); }
+        20% { transform: translate(-3px, 0); }
+        40% { transform: translate(3px, 0); }
+        60% { transform: translate(-3px, 0); }
+        80% { transform: translate(3px, 0); }
+        100% { transform: translate(0); }
+      }
+      
+      @keyframes glitchEffect2 {
+        0% { transform: translate(0); }
+        20% { transform: translate(3px, 0); }
+        40% { transform: translate(-3px, 0); }
+        60% { transform: translate(3px, 0); }
+        80% { transform: translate(-3px, 0); }
+        100% { transform: translate(0); }
+      }
+      
+      @keyframes horizontalGlitch {
+        0% { transform: translateX(0); opacity: 0; }
+        10% { transform: translateX(0); opacity: 0.7; }
+        11% { transform: translateX(30px); opacity: 0.7; }
+        15% { transform: translateX(-20px); opacity: 0.7; }
+        18% { transform: translateX(0); opacity: 0; }
+        20% { opacity: 0; }
+        30% { opacity: 0; }
+        31% { transform: translateX(0); opacity: 0.7; }
+        32% { transform: translateX(-20px); opacity: 0.7; }
+        33% { transform: translateX(0); opacity: 0; }
+        80% { opacity: 0; }
+        85% { transform: translateX(0); opacity: 0.7; }
+        95% { transform: translateX(0); opacity: 0.7; }
+        100% { transform: translateX(0); opacity: 0; }
+      }
+      
+      @keyframes textBroken {
+        0% { clip-path: inset(0 0 0 0); }
+        5% { clip-path: inset(30% 0 20% 0); }
+        5.5% { clip-path: inset(0 0 0 0); }
+        6% { clip-path: inset(10% 0 40% 0); }
+        6.5% { clip-path: inset(0 0 0 0); }
+        7% { clip-path: inset(0 0 0 0); }
+        20% { clip-path: inset(0 0 0 0); }
+        20.5% { clip-path: inset(0 30% 0 10%); }
+        21% { clip-path: inset(0 0 0 0); }
+        92% { clip-path: inset(0 0 0 0); }
+        92.5% { clip-path: inset(40% 10% 0 10%); }
+        93% { clip-path: inset(0 0 0 0); }
+        93.5% { clip-path: inset(10% 0 25% 0); }
+        94% { clip-path: inset(0 0 0 0); }
+        100% { clip-path: inset(0 0 0 0); }
+      }
+      
+      @keyframes flickerOn {
+        0% { opacity: 0; }
+        10% { opacity: 0; }
+        10.1% { opacity: 0.5; }
+        10.2% { opacity: 0; }
+        20% { opacity: 0; }
+        20.1% { opacity: 0.7; }
+        20.6% { opacity: 0; }
+        30% { opacity: 0; }
+        30.1% { opacity: 0.6; }
+        30.5% { opacity: 0; }
+        90% { opacity: 0; }
+        90.1% { opacity: 0.5; }
+        90.2% { opacity: 0; }
+        100% { opacity: 0; }
+      }
+    `;
+    
+    // スタイル要素をヘッドに追加
+    document.head.appendChild(styleEl);
+    
+    // クリーンアップ関数
+    return () => {
+      if (styleEl && document.head.contains(styleEl)) {
+        document.head.removeChild(styleEl);
+      }
+    };
+  }, []);
 
   return (
     <div className="relative w-full h-screen" style={containerStyle}>
@@ -295,93 +431,39 @@ export default function DynamicHomepage() {
           
           {/* Main Site Title - Responsive - モバイルでもPCと同様にオブジェクトと重なるように調整 */}
           <Html 
-            position={isMobile ? [0, 0, 2] : [0, 2.5, 0]} 
+            position={isMobile ? [0, -1, 2] : [0, 2.5, 0]} 
             center 
             transform 
-            occlude
-            distanceFactor={isMobile ? 2 : 10} // モバイルではさらに近くに調整
+            distanceFactor={isMobile ? 4 : 10} // モバイルでは適切な距離に調整
           >
-            <div
+            <div 
+              className="site-name-cyberpunk"
+              data-text="gomix666.com"
               style={{
-                color: '#00ffff',
-                textShadow: `
-                  0 0 15px #00ffff, 
-                  0 0 25px #00ffff, 
-                  0 0 35px #00ffff, 
-                  0 0 45px rgba(0, 255, 255, 0.7), 
-                  0 0 75px rgba(0, 255, 255, 0.5), 
-                  0 0 95px rgba(0, 255, 255, 0.4),
-                  0 0 120px rgba(0, 255, 255, 0.3)
-                `,
-                fontFamily: '"Courier New", Courier, monospace',
-                fontSize: isMobile ? 'clamp(0.9rem, 4vw, 1.5rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // モバイルではより大きく調整
+                fontSize: isMobile ? 'clamp(0.7rem, 3vw, 1.2rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // モバイルでは小さく調整して画面に収める
+                transform: isMobile ? 'scale(0.6)' : 'scale(1)', // モバイルではスケールを0.6に設定して画面に収める
                 fontWeight: 'bold',
-                whiteSpace: 'nowrap',
-                pointerEvents: 'none',
-                transform: isMobile ? 'scale(1)' : 'scale(1)', // モバイルでもスケールを1に設定
-                opacity: 1, // 完全に不透明にして目立たせる
-                transformOrigin: 'center center',
-                animation: 'textGlow 2s infinite alternate, textFlicker 5s infinite',
-                letterSpacing: '0.1em',
-                padding: '0.8em 1.2em',
-                position: 'relative',
-                WebkitTextStroke: '1px rgba(0, 255, 255, 0.5)', // テキストの外柄を追加
-                filter: 'drop-shadow(0 0 10px rgba(0, 255, 255, 0.8))', // ドロップシャドウを追加
+                letterSpacing: isMobile ? '0.1em' : '0.15em', // モバイルでは文字間隔を狭める
               }}
             >
               gomix666.com
               
-              {/* ノイズエフェクトを強化 */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'5\' stitchTiles=\'stitch\' /%3E%3CfeColorMatrix type=\'matrix\' values=\'1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0\' /%3E%3C/filter%3E%3Crect width=\'100%\' height=\'100%\' filter=\'url(%23noiseFilter)\' /%3E%3C/svg%3E")',
-                  backgroundSize: 'cover',
-                  opacity: 0.6, // 不透明度をさらに上げる
-                  mixBlendMode: 'overlay',
-                  pointerEvents: 'none',
-                  animation: 'noiseShift 3s infinite linear',
-                  zIndex: 1, // 重なり順を確保
-                }}
-              />
+              {/* ノイズオーバーレイ */}
+              <div className="noise-overlay" />
               
-              {/* グリッチエフェクトを追加 */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: '2px',
-                  left: '-2px',
-                  right: 0,
-                  bottom: 0,
-                  color: '#ff00ff',
-                  opacity: 0.5,
-                  pointerEvents: 'none',
-                  animation: 'glitchEffect 4s infinite alternate',
-                  clipPath: 'polygon(0 15%, 100% 15%, 100% 30%, 0 30%, 0 45%, 100% 45%, 100% 75%, 0 75%)',
-                }}
-              >
+              {/* 水平グリッチライン */}
+              <div className="horizontal-glitch" />
+              <div className="horizontal-glitch" style={{ top: '30%', animationDelay: '1.5s' }} />
+              <div className="horizontal-glitch" style={{ top: '70%', animationDelay: '3s' }} />
+              
+              {/* 点滅オーバーレイ */}
+              <div className="flicker-overlay" />
+              
+              {/* 赤と紫のグリッチオーバーレイ */}
+              <div className="glitch-overlay-purple">
                 gomix666.com
               </div>
-              
-              {/* 赤のグリッチエフェクト */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: '-2px',
-                  left: '2px',
-                  right: 0,
-                  bottom: 0,
-                  color: '#ff0000',
-                  opacity: 0.5,
-                  pointerEvents: 'none',
-                  animation: 'glitchEffect2 3s infinite alternate-reverse',
-                  clipPath: 'polygon(0 10%, 100% 10%, 100% 25%, 0 25%, 0 40%, 100% 40%, 100% 65%, 0 65%)',
-                }}
-              >
+              <div className="glitch-overlay-red">
                 gomix666.com
               </div>
             </div>
