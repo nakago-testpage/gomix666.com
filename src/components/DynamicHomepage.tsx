@@ -10,12 +10,23 @@ function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
   
   useEffect(() => {
-    // モバイルデバイスの検出
+    // モバイルデバイスの検出 - より確実に検出するよう改善
     const checkMobile = () => {
       const userAgent = navigator.userAgent.toLowerCase();
-      const isMobileDevice = /iphone|ipad|ipod|android|blackberry|windows phone|opera mini|silk|mobile/i.test(userAgent);
+      const isMobileDevice = /iphone|ipad|ipod|android|blackberry|windows phone|opera mini|silk|mobile|tablet|phone/i.test(userAgent);
       const isSmallScreen = window.innerWidth < 768;
-      setIsMobile(isMobileDevice || isSmallScreen);
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      
+      // コンソールにデバッグ情報を出力
+      console.log('Device detection:', {
+        userAgent,
+        width: window.innerWidth,
+        isMobileDevice,
+        isSmallScreen,
+        isTouchDevice
+      });
+      
+      setIsMobile(isMobileDevice || isSmallScreen || isTouchDevice);
     };
     
     checkMobile();
@@ -135,12 +146,12 @@ function SolarSystemMonument() {
   const isMobile = useIsMobile();
   
   // モバイル表示時はオブジェクトを大きくするが、サイト名と重なるように調整
-  const scale = isMobile ? 2.5 : 1.0; // モバイルでは2.5倍に拡大（3倍から調整）
+  const scale = isMobile ? 2.0 : 1.0; // モバイルでは2.0倍に拡大（2.5倍から調整）
   
   // 初期角度を設定して立体的に見せる
   return (
     <group 
-      position={isMobile ? [0, 0, 0] : [0, 0, 0]} // モバイル表示時の位置を調整
+      position={isMobile ? [0, -2, 0] : [0, 0, 0]} // モバイル表示時の位置を下に調整
       rotation={[Math.PI / 6, Math.PI / 4, 0]} 
       scale={scale}>
       {/* Sun - glowing center */}
@@ -257,7 +268,7 @@ export default function DynamicHomepage() {
 
   // モバイル表示時のカメラ位置とFOVを調整
   const cameraSettings = isMobile 
-    ? { position: [0, 0, 12] as [number, number, number], fov: 35 } // モバイル用：より遠くから見る、視野角をさらに狭く
+    ? { position: [0, 0, 10] as [number, number, number], fov: 40 } // モバイル用：より近くから見る、視野角を広めに
     : { position: [5, 3, 15] as [number, number, number], fov: 60 }; // PC用：従来の設定
 
   // モバイル表示時のスタイル調整
@@ -265,7 +276,12 @@ export default function DynamicHomepage() {
     position: 'relative' as const,
     zIndex: 0,
     maxHeight: '100vh',
-    overflow: 'hidden' // オーバーフローを防止
+    overflow: 'hidden', // オーバーフローを防止
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   };
 
   return (
@@ -279,11 +295,11 @@ export default function DynamicHomepage() {
           
           {/* Main Site Title - Responsive - モバイルでもPCと同様にオブジェクトと重なるように調整 */}
           <Html 
-            position={isMobile ? [0, -2, 0] : [0, 2.5, 0]} 
+            position={isMobile ? [0, 0, 2] : [0, 2.5, 0]} 
             center 
             transform 
             occlude
-            distanceFactor={isMobile ? 3 : 10} // モバイルではさらに近くに調整
+            distanceFactor={isMobile ? 2 : 10} // モバイルではさらに近くに調整
           >
             <div
               style={{
@@ -298,11 +314,11 @@ export default function DynamicHomepage() {
                   0 0 120px rgba(0, 255, 255, 0.3)
                 `,
                 fontFamily: '"Courier New", Courier, monospace',
-                fontSize: isMobile ? 'clamp(0.7rem, 3vw, 1.2rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // モバイルではより小さく調整
+                fontSize: isMobile ? 'clamp(0.9rem, 4vw, 1.5rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // モバイルではより大きく調整
                 fontWeight: 'bold',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: isMobile ? 'scale(0.8)' : 'scale(1)', // モバイルではより小さくスケールを調整
+                transform: isMobile ? 'scale(1)' : 'scale(1)', // モバイルでもスケールを1に設定
                 opacity: 1, // 完全に不透明にして目立たせる
                 transformOrigin: 'center center',
                 animation: 'textGlow 2s infinite alternate, textFlicker 5s infinite',
@@ -325,10 +341,11 @@ export default function DynamicHomepage() {
                   bottom: 0,
                   backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'5\' stitchTiles=\'stitch\' /%3E%3CfeColorMatrix type=\'matrix\' values=\'1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0\' /%3E%3C/filter%3E%3Crect width=\'100%\' height=\'100%\' filter=\'url(%23noiseFilter)\' /%3E%3C/svg%3E")',
                   backgroundSize: 'cover',
-                  opacity: 0.4, // 不透明度を上げる
+                  opacity: 0.6, // 不透明度をさらに上げる
                   mixBlendMode: 'overlay',
                   pointerEvents: 'none',
                   animation: 'noiseShift 3s infinite linear',
+                  zIndex: 1, // 重なり順を確保
                 }}
               />
               
