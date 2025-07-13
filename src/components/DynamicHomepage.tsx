@@ -135,12 +135,12 @@ function SolarSystemMonument() {
   const isMobile = useIsMobile();
   
   // モバイル表示時はオブジェクトを大きくするが、サイト名と重なるように調整
-  const scale = isMobile ? 3.0 : 1.0; // モバイルでは3倍に拡大（4倍から調整）
+  const scale = isMobile ? 2.5 : 1.0; // モバイルでは2.5倍に拡大（3倍から調整）
   
   // 初期角度を設定して立体的に見せる
   return (
     <group 
-      position={isMobile ? [0, -1, 0] : [0, 0, 0]} // モバイル表示時は少し下に配置
+      position={isMobile ? [0, 0, 0] : [0, 0, 0]} // モバイル表示時の位置を調整
       rotation={[Math.PI / 6, Math.PI / 4, 0]} 
       scale={scale}>
       {/* Sun - glowing center */}
@@ -257,7 +257,7 @@ export default function DynamicHomepage() {
 
   // モバイル表示時のカメラ位置とFOVを調整
   const cameraSettings = isMobile 
-    ? { position: [0, 0, 10] as [number, number, number], fov: 40 } // モバイル用：さらに近くから見る、視野角をさらに狭く
+    ? { position: [0, 0, 12] as [number, number, number], fov: 35 } // モバイル用：より遠くから見る、視野角をさらに狭く
     : { position: [5, 3, 15] as [number, number, number], fov: 60 }; // PC用：従来の設定
 
   // モバイル表示時のスタイル調整
@@ -279,11 +279,11 @@ export default function DynamicHomepage() {
           
           {/* Main Site Title - Responsive - モバイルでもPCと同様にオブジェクトと重なるように調整 */}
           <Html 
-            position={isMobile ? [0, 0, 0] : [0, 2.5, 0]} 
+            position={isMobile ? [0, -2, 0] : [0, 2.5, 0]} 
             center 
             transform 
             occlude
-            distanceFactor={isMobile ? 4 : 10} // モバイルではさらに近くに調整
+            distanceFactor={isMobile ? 3 : 10} // モバイルではさらに近くに調整
           >
             <div
               style={{
@@ -302,7 +302,7 @@ export default function DynamicHomepage() {
                 fontWeight: 'bold',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
-                transform: isMobile ? 'scale(0.6)' : 'scale(1)', // モバイルではより小さくスケールを調整
+                transform: isMobile ? 'scale(0.8)' : 'scale(1)', // モバイルではより小さくスケールを調整
                 opacity: 1, // 完全に不透明にして目立たせる
                 transformOrigin: 'center center',
                 animation: 'textGlow 2s infinite alternate, textFlicker 5s infinite',
