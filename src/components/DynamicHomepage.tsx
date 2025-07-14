@@ -255,6 +255,105 @@ function FloatingTextComponent({ text }: { text: string }) {
   );
 }
 
+// アニメーションのキーフレームを定義
+const keyframes = {
+  textGlow: `
+    0% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff; }
+    50% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
+    100% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff; }
+  `,
+  textFlicker: `
+    0% { opacity: 1; }
+    3% { opacity: 0.8; }
+    6% { opacity: 1; }
+    7% { opacity: 0.6; }
+    8% { opacity: 1; }
+    9% { opacity: 0.9; }
+    10% { opacity: 1; }
+    30% { opacity: 1; }
+    35% { opacity: 0.7; }
+    40% { opacity: 1; }
+    75% { opacity: 1; }
+    76% { opacity: 0.8; }
+    77% { opacity: 1; }
+    78% { opacity: 0.9; }
+    79% { opacity: 1; }
+    100% { opacity: 1; }
+  `,
+  textBroken: `
+    0% { filter: blur(0.5px); transform: translate(0, 0); }
+    10% { filter: blur(1px); transform: translate(-3px, 0); }
+    20% { filter: blur(0.7px); transform: translate(3px, 0); }
+    30% { filter: blur(1.2px); transform: translate(-3px, 0); }
+    40% { filter: blur(0.5px); transform: translate(3px, 0); }
+    50% { filter: blur(1.5px); transform: translate(-3px, 0); }
+    60% { filter: blur(0.7px); transform: translate(3px, 0); }
+    70% { filter: blur(1.2px); transform: translate(-3px, 0); }
+    80% { filter: blur(0.5px); transform: translate(3px, 0); }
+    90% { filter: blur(1px); transform: translate(-3px, 0); }
+    100% { filter: blur(0.5px); transform: translate(0, 0); }
+  `,
+  glitchEffect: `
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-3px, 0); }
+    40% { transform: translate(3px, 0); }
+    60% { transform: translate(-3px, 0); }
+    80% { transform: translate(3px, 0); }
+    100% { transform: translate(0, 0); }
+  `,
+  glitchEffect2: `
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(3px, 0); }
+    40% { transform: translate(-3px, 0); }
+    60% { transform: translate(3px, 0); }
+    80% { transform: translate(-3px, 0); }
+    100% { transform: translate(0, 0); }
+  `,
+  noiseShift: `
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+  `,
+  horizontalGlitch: `
+    0% { top: 10%; }
+    20% { top: 40%; }
+    40% { top: 20%; }
+    60% { top: 80%; }
+    80% { top: 30%; }
+    100% { top: 10%; }
+  `,
+  flickerOverlay: `
+    0% { opacity: 0; }
+    5% { opacity: 0.3; }
+    10% { opacity: 0; }
+    15% { opacity: 0.3; }
+    20% { opacity: 0; }
+    25% { opacity: 0.3; }
+    30% { opacity: 0; }
+    70% { opacity: 0; }
+    75% { opacity: 0.3; }
+    80% { opacity: 0; }
+    85% { opacity: 0.3; }
+    90% { opacity: 0; }
+    100% { opacity: 0; }
+  `,
+  flickerOn: `
+    0% { opacity: 0; }
+    10% { opacity: 0; }
+    10.1% { opacity: 0.5; }
+    10.2% { opacity: 0; }
+    20% { opacity: 0; }
+    20.1% { opacity: 0.7; }
+    20.6% { opacity: 0; }
+    30% { opacity: 0; }
+    30.1% { opacity: 0.2; }
+    30.2% { opacity: 0; }
+    40% { opacity: 0; }
+    40.1% { opacity: 0.5; }
+    40.2% { opacity: 0; }
+    100% { opacity: 0; }
+  `,
+};
+
 // --- Main Component ---
 export default function DynamicHomepage() {
   // モバイルデバイスかどうかを検出
@@ -284,140 +383,191 @@ export default function DynamicHomepage() {
     alignItems: 'center'
   };
   
-  // グローバルスタイルを追加（アニメーション定義）
+  // グローバルスタイルを追加（アニメーション定義）- SSR対応版
   useEffect(() => {
-    // 既存のスタイル要素があれば削除
-    const existingStyle = document.getElementById('dynamic-homepage-styles');
-    if (existingStyle) {
-      existingStyle.remove();
+    // クライアントサイドでのみ実行
+    if (typeof window !== 'undefined') {
+      // 既存のスタイル要素があれば削除
+      const existingStyle = document.getElementById('dynamic-homepage-styles');
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+      
+      // 新しいスタイル要素を作成
+      const styleEl = document.createElement('style');
+      styleEl.id = 'dynamic-homepage-styles';
+      styleEl.innerHTML = `
+        @keyframes textGlow {
+          0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+          50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff; }
+          100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        }
+        
+        @keyframes textFlicker {
+          0% { opacity: 1; }
+          3% { opacity: 0.8; }
+          6% { opacity: 1; }
+          7% { opacity: 0.4; }
+          8% { opacity: 1; }
+          9% { opacity: 0.9; }
+          10% { opacity: 0.7; }
+          20% { opacity: 1; }
+          50% { opacity: 0.9; }
+          70% { opacity: 1; }
+          73% { opacity: 0; }
+          74% { opacity: 1; }
+          75% { opacity: 0.8; }
+          76% { opacity: 1; }
+          77% { opacity: 0.9; }
+          78% { opacity: 1; }
+          85% { opacity: 0.7; }
+          86% { opacity: 1; }
+          100% { opacity: 0.9; }
+        }
+        
+        @keyframes noiseShift {
+          0% { transform: translate(0, 0); }
+          10% { transform: translate(-5%, -5%); }
+          20% { transform: translate(3%, 7%); }
+          30% { transform: translate(7%, -3%); }
+          40% { transform: translate(-5%, 5%); }
+          50% { transform: translate(5%, 5%); }
+          60% { transform: translate(7%, -7%); }
+          70% { transform: translate(-3%, 3%); }
+          80% { transform: translate(1%, -1%); }
+          90% { transform: translate(-1%, 3%); }
+          100% { transform: translate(0, 0); }
+        }
+        
+        @keyframes glitchEffect {
+          0% { transform: translate(0); }
+          20% { transform: translate(-3px, 0); }
+          40% { transform: translate(3px, 0); }
+          60% { transform: translate(-3px, 0); }
+          80% { transform: translate(3px, 0); }
+          100% { transform: translate(0); }
+        }
+        
+        @keyframes glitchEffect2 {
+          0% { transform: translate(0); }
+          20% { transform: translate(3px, 0); }
+          40% { transform: translate(-3px, 0); }
+          60% { transform: translate(3px, 0); }
+          80% { transform: translate(-3px, 0); }
+          100% { transform: translate(0); }
+        }
+        
+        @keyframes horizontalGlitch {
+          0% { transform: translateX(0); opacity: 0; }
+          10% { transform: translateX(0); opacity: 0.7; }
+          11% { transform: translateX(30px); opacity: 0.7; }
+          15% { transform: translateX(-20px); opacity: 0.7; }
+          18% { transform: translateX(0); opacity: 0; }
+          20% { opacity: 0; }
+          30% { opacity: 0; }
+          31% { transform: translateX(0); opacity: 0.7; }
+          32% { transform: translateX(-20px); opacity: 0.7; }
+          33% { transform: translateX(0); opacity: 0; }
+          80% { opacity: 0; }
+          85% { transform: translateX(0); opacity: 0.7; }
+          95% { transform: translateX(0); opacity: 0.7; }
+          100% { transform: translateX(0); opacity: 0; }
+        }
+        
+        @keyframes flickerOverlay {
+          0% { opacity: 0; }
+          10% { opacity: 0.7; }
+          20% { opacity: 0; }
+          30% { opacity: 0.7; }
+          40% { opacity: 0; }
+          50% { opacity: 0.7; }
+          60% { opacity: 0; }
+          70% { opacity: 0.7; }
+          80% { opacity: 0; }
+          90% { opacity: 0.7; }
+          100% { opacity: 0; }
+        }
+        
+        @keyframes flickerOn {
+          0% { opacity: 0; }
+          10% { opacity: 0; }
+          10.1% { opacity: 0.5; }
+          10.2% { opacity: 0; }
+          20% { opacity: 0; }
+          20.1% { opacity: 0.7; }
+          20.6% { opacity: 0; }
+          30% { opacity: 0; }
+          30.1% { opacity: 0.6; }
+          30.5% { opacity: 0; }
+          90% { opacity: 0; }
+          90.1% { opacity: 0.5; }
+          90.2% { opacity: 0; }
+          100% { opacity: 0; }
+        }
+        
+        @keyframes textBroken {
+          0% { clip-path: inset(0 0 0 0); }
+          5% { clip-path: inset(30% 0 20% 0); }
+          5.5% { clip-path: inset(0 0 0 0); }
+          6% { clip-path: inset(10% 0 40% 0); }
+          6.5% { clip-path: inset(0 0 0 0); }
+          7% { clip-path: inset(0 0 0 0); }
+          20% { clip-path: inset(0 0 0 0); }
+          20.5% { clip-path: inset(0 30% 0 10%); }
+          21% { clip-path: inset(0 0 0 0); }
+          92% { clip-path: inset(0 0 0 0); }
+          92.5% { clip-path: inset(40% 10% 0 10%); }
+          93% { clip-path: inset(0 0 0 0); }
+          93.5% { clip-path: inset(10% 0 25% 0); }
+          94% { clip-path: inset(0 0 0 0); }
+          100% { clip-path: inset(0 0 0 0); }
+        }
+
+        /* サイト名のアニメーション適用 */
+        .site-name {
+          animation: textGlow 2s infinite, textFlicker 5s infinite, textBroken 8s infinite;
+        }
+        .noise-overlay {
+          animation: noiseShift 3s infinite linear;
+        }
+        .horizontal-glitch {
+          animation: horizontalGlitch 7s infinite linear;
+        }
+        .horizontal-glitch-2 {
+          animation: horizontalGlitch 5s infinite linear;
+          animation-delay: 2.5s;
+        }
+        .color-overlay-red {
+          animation: flickerOverlay 4s infinite;
+          animation-delay: 1.5s;
+        }
+        .color-overlay-cyan {
+          animation: flickerOverlay 3.5s infinite;
+          animation-delay: 3s;
+        }
+        .flicker-overlay {
+          animation: flickerOn 10s infinite;
+        }
+        .glitch-text-red {
+          animation: glitchEffect 4s infinite;
+        }
+        .glitch-text-purple {
+          animation: glitchEffect2 4.5s infinite;
+        }
+      `;
+      
+      // スタイル要素をヘッドに追加
+      document.head.appendChild(styleEl);
+      
+      // クリーンアップ関数
+      return () => {
+        if (styleEl && document.head.contains(styleEl)) {
+          document.head.removeChild(styleEl);
+        }
+      };
     }
-    
-    // 新しいスタイル要素を作成
-    const styleEl = document.createElement('style');
-    styleEl.id = 'dynamic-homepage-styles';
-    styleEl.innerHTML = `
-      @keyframes textGlow {
-        0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
-        50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
-        100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
-      }
-      
-      @keyframes textFlicker {
-        0% { opacity: 1; }
-        3% { opacity: 0.8; }
-        6% { opacity: 1; }
-        7% { opacity: 0.4; }
-        8% { opacity: 1; }
-        9% { opacity: 0.9; }
-        10% { opacity: 0.7; }
-        20% { opacity: 1; }
-        50% { opacity: 0.9; }
-        70% { opacity: 1; }
-        73% { opacity: 0; }
-        74% { opacity: 1; }
-        75% { opacity: 0.8; }
-        76% { opacity: 1; }
-        77% { opacity: 0.9; }
-        78% { opacity: 1; }
-        85% { opacity: 0.7; }
-        86% { opacity: 1; }
-        100% { opacity: 0.9; }
-      }
-      
-      @keyframes noiseShift {
-        0% { transform: translate(0, 0); }
-        10% { transform: translate(-5%, -5%); }
-        20% { transform: translate(3%, 7%); }
-        30% { transform: translate(7%, -3%); }
-        40% { transform: translate(-5%, 5%); }
-        50% { transform: translate(5%, 5%); }
-        60% { transform: translate(7%, -7%); }
-        70% { transform: translate(-3%, 3%); }
-        80% { transform: translate(1%, -1%); }
-        90% { transform: translate(-1%, 3%); }
-        100% { transform: translate(0, 0); }
-      }
-      
-      @keyframes glitchEffect {
-        0% { transform: translate(0); }
-        20% { transform: translate(-3px, 0); }
-        40% { transform: translate(3px, 0); }
-        60% { transform: translate(-3px, 0); }
-        80% { transform: translate(3px, 0); }
-        100% { transform: translate(0); }
-      }
-      
-      @keyframes glitchEffect2 {
-        0% { transform: translate(0); }
-        20% { transform: translate(3px, 0); }
-        40% { transform: translate(-3px, 0); }
-        60% { transform: translate(3px, 0); }
-        80% { transform: translate(-3px, 0); }
-        100% { transform: translate(0); }
-      }
-      
-      @keyframes horizontalGlitch {
-        0% { transform: translateX(0); opacity: 0; }
-        10% { transform: translateX(0); opacity: 0.7; }
-        11% { transform: translateX(30px); opacity: 0.7; }
-        15% { transform: translateX(-20px); opacity: 0.7; }
-        18% { transform: translateX(0); opacity: 0; }
-        20% { opacity: 0; }
-        30% { opacity: 0; }
-        31% { transform: translateX(0); opacity: 0.7; }
-        32% { transform: translateX(-20px); opacity: 0.7; }
-        33% { transform: translateX(0); opacity: 0; }
-        80% { opacity: 0; }
-        85% { transform: translateX(0); opacity: 0.7; }
-        95% { transform: translateX(0); opacity: 0.7; }
-        100% { transform: translateX(0); opacity: 0; }
-      }
-      
-      @keyframes textBroken {
-        0% { clip-path: inset(0 0 0 0); }
-        5% { clip-path: inset(30% 0 20% 0); }
-        5.5% { clip-path: inset(0 0 0 0); }
-        6% { clip-path: inset(10% 0 40% 0); }
-        6.5% { clip-path: inset(0 0 0 0); }
-        7% { clip-path: inset(0 0 0 0); }
-        20% { clip-path: inset(0 0 0 0); }
-        20.5% { clip-path: inset(0 30% 0 10%); }
-        21% { clip-path: inset(0 0 0 0); }
-        92% { clip-path: inset(0 0 0 0); }
-        92.5% { clip-path: inset(40% 10% 0 10%); }
-        93% { clip-path: inset(0 0 0 0); }
-        93.5% { clip-path: inset(10% 0 25% 0); }
-        94% { clip-path: inset(0 0 0 0); }
-        100% { clip-path: inset(0 0 0 0); }
-      }
-      
-      @keyframes flickerOn {
-        0% { opacity: 0; }
-        10% { opacity: 0; }
-        10.1% { opacity: 0.5; }
-        10.2% { opacity: 0; }
-        20% { opacity: 0; }
-        20.1% { opacity: 0.7; }
-        20.6% { opacity: 0; }
-        30% { opacity: 0; }
-        30.1% { opacity: 0.6; }
-        30.5% { opacity: 0; }
-        90% { opacity: 0; }
-        90.1% { opacity: 0.5; }
-        90.2% { opacity: 0; }
-        100% { opacity: 0; }
-      }
-    `;
-    
-    // スタイル要素をヘッドに追加
-    document.head.appendChild(styleEl);
-    
-    // クリーンアップ関数
-    return () => {
-      if (styleEl && document.head.contains(styleEl)) {
-        document.head.removeChild(styleEl);
-      }
-    };
+    // SSRの場合は何もしない
+    return () => {};
   }, []);
 
   return (
@@ -430,42 +580,301 @@ export default function DynamicHomepage() {
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
           {/* Main Site Title - Responsive - モバイルでもPCと同様にオブジェクトと重なるように調整 */}
-          <Html 
-            position={isMobile ? [0, -1, 2] : [0, 2.5, 0]} 
-            center 
-            transform 
-            distanceFactor={isMobile ? 4 : 10} // モバイルでは適切な距離に調整
-          >
+          <Html position={isMobile ? [0, 0, 0] : [0, 2.5, 0]} distanceFactor={isMobile ? 5 : 10}>
             <div 
-              className="site-name-cyberpunk"
-              data-text="gomix666.com"
+              className="site-name"
               style={{
-                fontSize: isMobile ? 'clamp(0.7rem, 3vw, 1.2rem)' : 'clamp(1.8rem, 5vw, 2.8rem)', // モバイルでは小さく調整して画面に収める
-                transform: isMobile ? 'scale(0.6)' : 'scale(1)', // モバイルではスケールを0.6に設定して画面に収める
-                fontWeight: 'bold',
-                letterSpacing: isMobile ? '0.1em' : '0.15em', // モバイルでは文字間隔を狭める
+                fontFamily: 'var(--font-vt323), "Courier New", monospace',
+                color: '#ffffff',
+                textShadow: '0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff',
+                filter: 'blur(0.7px)',
+                fontSize: isMobile ? 'clamp(0.7rem, 3vw, 1.2rem)' : 'clamp(1.8rem, 5vw, 2.8rem)',
+                transform: isMobile ? 'scale(0.6)' : 'scale(1)',
+                letterSpacing: isMobile ? '0.05em' : '0.1em',
+                position: 'relative',
+                padding: '10px',
+                textAlign: 'center',
+                width: 'auto',
+                pointerEvents: 'none',
+                zIndex: 10,
+                WebkitAnimation: 'textGlow 2s infinite, textFlicker 5s infinite, textBroken 8s infinite',
+                animation: 'textGlow 2s infinite, textFlicker 5s infinite, textBroken 8s infinite'
               }}
             >
+              <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes textGlow {
+                  0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+                  50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
+                  100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+                }
+                
+                @keyframes textFlicker {
+                  0% { opacity: 1; }
+                  3% { opacity: 0.8; }
+                  6% { opacity: 1; }
+                  7% { opacity: 0.4; }
+                  8% { opacity: 1; }
+                  9% { opacity: 0.9; }
+                  10% { opacity: 0.7; }
+                  20% { opacity: 1; }
+                  50% { opacity: 0.9; }
+                  70% { opacity: 1; }
+                  73% { opacity: 0; }
+                  74% { opacity: 1; }
+                  75% { opacity: 0.8; }
+                  76% { opacity: 1; }
+                  77% { opacity: 0.9; }
+                  78% { opacity: 1; }
+                  85% { opacity: 0.7; }
+                  86% { opacity: 1; }
+                  100% { opacity: 0.9; }
+                }
+                
+                @keyframes textBroken {
+                  0% { clip-path: inset(0 0 0 0); }
+                  5% { clip-path: inset(30% 0 20% 0); }
+                  5.5% { clip-path: inset(0 0 0 0); }
+                  6% { clip-path: inset(10% 0 40% 0); }
+                  6.5% { clip-path: inset(0 0 0 0); }
+                  7% { clip-path: inset(0 0 0 0); }
+                  20% { clip-path: inset(0 0 0 0); }
+                  20.5% { clip-path: inset(0 30% 0 10%); }
+                  21% { clip-path: inset(0 0 0 0); }
+                  92% { clip-path: inset(0 0 0 0); }
+                  92.5% { clip-path: inset(40% 10% 0 10%); }
+                  93% { clip-path: inset(0 0 0 0); }
+                  93.5% { clip-path: inset(10% 0 25% 0); }
+                  94% { clip-path: inset(0 0 0 0); }
+                  100% { clip-path: inset(0 0 0 0); }
+                }
+                
+                @keyframes glitchEffect {
+                  0% { transform: translate(0); }
+                  20% { transform: translate(-3px, 0); }
+                  40% { transform: translate(3px, 0); }
+                  60% { transform: translate(-3px, 0); }
+                  80% { transform: translate(3px, 0); }
+                  100% { transform: translate(0); }
+                }
+                
+                @keyframes glitchEffect2 {
+                  0% { transform: translate(0); }
+                  20% { transform: translate(3px, 0); }
+                  40% { transform: translate(-3px, 0); }
+                  60% { transform: translate(3px, 0); }
+                  80% { transform: translate(-3px, 0); }
+                  100% { transform: translate(0); }
+                }
+                
+                @keyframes noiseShift {
+                  0% { transform: translate(0, 0); }
+                  10% { transform: translate(-5%, -5%); }
+                  20% { transform: translate(3%, 7%); }
+                  30% { transform: translate(7%, -3%); }
+                  40% { transform: translate(-5%, 5%); }
+                  50% { transform: translate(5%, 5%); }
+                  60% { transform: translate(7%, -7%); }
+                  70% { transform: translate(-3%, 3%); }
+                  80% { transform: translate(1%, -1%); }
+                  90% { transform: translate(-1%, 3%); }
+                  100% { transform: translate(0, 0); }
+                }
+                
+                @keyframes horizontalGlitch {
+                  0% { transform: translateX(0); opacity: 0; }
+                  10% { transform: translateX(0); opacity: 0.7; }
+                  11% { transform: translateX(30px); opacity: 0.7; }
+                  15% { transform: translateX(-20px); opacity: 0.7; }
+                  18% { transform: translateX(0); opacity: 0; }
+                  20% { opacity: 0; }
+                  30% { opacity: 0; }
+                  31% { transform: translateX(0); opacity: 0.7; }
+                  32% { transform: translateX(-20px); opacity: 0.7; }
+                  33% { transform: translateX(0); opacity: 0; }
+                  80% { opacity: 0; }
+                  85% { transform: translateX(0); opacity: 0.7; }
+                  95% { transform: translateX(0); opacity: 0.7; }
+                  100% { transform: translateX(0); opacity: 0; }
+                }
+                
+                @keyframes flickerOverlay {
+                  0% { opacity: 0; }
+                  10% { opacity: 0.7; }
+                  20% { opacity: 0; }
+                  30% { opacity: 0.7; }
+                  40% { opacity: 0; }
+                  50% { opacity: 0.7; }
+                  60% { opacity: 0; }
+                  70% { opacity: 0.7; }
+                  80% { opacity: 0; }
+                  90% { opacity: 0.7; }
+                  100% { opacity: 0; }
+                }
+                
+                @keyframes flickerOn {
+                  0% { opacity: 0; }
+                  10% { opacity: 0; }
+                  10.1% { opacity: 0.5; }
+                  10.2% { opacity: 0; }
+                  20% { opacity: 0; }
+                  20.1% { opacity: 0.7; }
+                  20.6% { opacity: 0; }
+                  30% { opacity: 0; }
+                  30.1% { opacity: 0.6; }
+                  30.5% { opacity: 0; }
+                  90% { opacity: 0; }
+                  90.1% { opacity: 0.5; }
+                  90.2% { opacity: 0; }
+                  100% { opacity: 0; }
+                }
+                
+                .site-name {
+                  animation: textGlow 1s infinite, textFlicker 2s infinite, textBroken 8s infinite;
+                }
+                .noise-overlay {
+                  animation: noiseShift 3s infinite linear;
+                }
+                .horizontal-glitch {
+                  animation: horizontalGlitch 7s infinite linear;
+                }
+                .horizontal-glitch-2 {
+                  animation: horizontalGlitch 5s infinite linear;
+                  animation-delay: 2.5s;
+                }
+                .color-overlay-red {
+                  animation: flickerOverlay 4s infinite;
+                  animation-delay: 1.5s;
+                }
+                .color-overlay-cyan {
+                  animation: flickerOverlay 3.5s infinite;
+                  animation-delay: 3s;
+                }
+                .flicker-overlay {
+                  animation: flickerOn 10s infinite;
+                }
+                .glitch-text-red {
+                  animation: glitchEffect 4s infinite;
+                }
+                .glitch-text-purple {
+                  animation: glitchEffect2 4.5s infinite;
+                }
+              `}} />
+              
               gomix666.com
               
-              {/* ノイズオーバーレイ */}
-              <div className="noise-overlay" />
+              {/* グリッチエフェクトのオーバーレイ */}
+              <div className="noise-overlay" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%\' height=\'100%\' filter=\'url(%23noiseFilter)\' opacity=\'0.4\'/%3E%3C/svg%3E")',
+                backgroundSize: '150px 150px',
+                opacity: '0.3',
+                mixBlendMode: 'overlay',
+                pointerEvents: 'none',
+                zIndex: 2
+              }}></div>
               
               {/* 水平グリッチライン */}
-              <div className="horizontal-glitch" />
-              <div className="horizontal-glitch" style={{ top: '30%', animationDelay: '1.5s' }} />
-              <div className="horizontal-glitch" style={{ top: '70%', animationDelay: '3s' }} />
+              <div className="horizontal-glitch" style={{
+                position: 'absolute',
+                width: '100%',
+                height: '2px',
+                background: 'rgba(0, 255, 255, 0.8)',
+                top: '10%',
+                left: 0,
+                pointerEvents: 'none',
+                zIndex: 3,
+                boxShadow: '0 0 5px rgba(0, 255, 255, 0.8), 0 0 10px rgba(0, 255, 255, 0.5)'
+              }}></div>
               
-              {/* 点滅オーバーレイ */}
-              <div className="flicker-overlay" />
+              {/* 2本目の水平グリッチライン */}
+              <div className="horizontal-glitch-2" style={{
+                position: 'absolute',
+                width: '100%',
+                height: '1px',
+                background: 'rgba(255, 0, 255, 0.8)',
+                top: '70%',
+                left: 0,
+                pointerEvents: 'none',
+                zIndex: 3,
+                boxShadow: '0 0 5px rgba(255, 0, 255, 0.8), 0 0 10px rgba(255, 0, 255, 0.5)'
+              }}></div>
               
-              {/* 赤と紫のグリッチオーバーレイ */}
-              <div className="glitch-overlay-purple">
-                gomix666.com
-              </div>
-              <div className="glitch-overlay-red">
-                gomix666.com
-              </div>
+              {/* カラーオーバーレイ */}
+              <div className="color-overlay-red" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(transparent 0%, rgba(255, 0, 0, 0.2) 50%, transparent 100%)',
+                pointerEvents: 'none',
+                zIndex: 2,
+                mixBlendMode: 'color-dodge'
+              }}></div>
+              
+              <div className="color-overlay-cyan" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(transparent 0%, rgba(0, 255, 255, 0.15) 30%, transparent 100%)',
+                pointerEvents: 'none',
+                zIndex: 2,
+                mixBlendMode: 'screen'
+              }}></div>
+              
+              <div className="flicker-overlay" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0, 255, 255, 0.05)',
+                pointerEvents: 'none',
+                zIndex: 1
+              }}></div>
+              
+              {/* 赤と紫のグリッチオーバーレイテキスト */}
+              <div className="glitch-text-red" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 0, 0, 0.7)',
+                pointerEvents: 'none',
+                zIndex: 2,
+                textShadow: '0 0 2px rgba(255, 0, 0, 0.5)',
+                fontFamily: 'var(--font-vt323), "Courier New", monospace',
+                fontSize: isMobile ? '0.6rem' : 'clamp(1.8rem, 5vw, 2.8rem)',
+                letterSpacing: isMobile ? '0.05em' : '0.1em'
+              }}>gomix666.com</div>
+              
+              <div className="glitch-text-purple" style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 0, 255, 0.7)',
+                pointerEvents: 'none',
+                zIndex: 2,
+                textShadow: '0 0 2px rgba(255, 0, 255, 0.5)',
+                fontFamily: 'var(--font-vt323), "Courier New", monospace',
+                fontSize: isMobile ? '0.6rem' : 'clamp(1.8rem, 5vw, 2.8rem)',
+                letterSpacing: isMobile ? '0.05em' : '0.1em'
+              }}>gomix666.com</div>
             </div>
           </Html>
           
@@ -552,6 +961,75 @@ export default function DynamicHomepage() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+      
+      {/* 画面下部の大きなサイト名テキスト */}
+      <div className="absolute bottom-20 left-0 right-0 flex justify-center items-center pointer-events-none z-20">
+        <div className="glowing-site-name">
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes mainTextGlow {
+              0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+              50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 60px #00ffff; }
+              100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+            }
+            @keyframes mainTextFlicker {
+              0% { opacity: 1; }
+              3% { opacity: 0.8; }
+              6% { opacity: 1; }
+              7% { opacity: 0.4; }
+              8% { opacity: 1; }
+              9% { opacity: 0.9; }
+              10% { opacity: 0.7; }
+              20% { opacity: 1; }
+              50% { opacity: 0.9; }
+              70% { opacity: 1; }
+              73% { opacity: 0; }
+              74% { opacity: 1; }
+              75% { opacity: 0.8; }
+              76% { opacity: 1; }
+              77% { opacity: 0.9; }
+              78% { opacity: 1; }
+              85% { opacity: 0.7; }
+              86% { opacity: 1; }
+              100% { opacity: 0.9; }
+            }
+            .glowing-site-name {
+              font-family: var(--font-vt323), "Courier New", monospace;
+              color: #ffffff;
+              font-size: clamp(2rem, 10vw, 5rem);
+              letter-spacing: 0.1em;
+              text-align: center;
+              animation: mainTextGlow 2s infinite, mainTextFlicker 3s infinite;
+              filter: blur(0.5px);
+              position: relative;
+            }
+            .glowing-site-name::before {
+              content: 'gomix666.com';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              color: rgba(255, 0, 255, 0.7);
+              animation: glitchEffect 4s infinite;
+              z-index: -1;
+              filter: blur(1px);
+            }
+            .glowing-site-name::after {
+              content: 'gomix666.com';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              color: rgba(255, 0, 0, 0.7);
+              animation: glitchEffect2 4.5s infinite;
+              z-index: -1;
+              filter: blur(1px);
+            }
+          `}} />
+          gomix666.com
         </div>
       </div>
     </div>
