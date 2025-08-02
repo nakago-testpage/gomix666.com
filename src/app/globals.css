@@ -34,10 +34,10 @@ body {
     }
   }
   
-  /* サイト名のサイバーパンク風スタイル - 強化版 */
+  /* サイト名のサイバーパンク風スタイル - 強化版（優先度向上） */
   .site-name-cyberpunk {
-    font-family: var(--font-vt323), "Courier New", monospace;
-    color: #ffffff;
+    font-family: var(--font-vt323), "Courier New", monospace !important;
+    color: #ffffff !important;
     text-shadow: 
       0 0 5px #00ffff, 
       0 0 10px #00ffff, 
@@ -46,16 +46,19 @@ body {
       0 0 35px #00ffff, 
       0 0 40px #00ffff, 
       0 0 50px rgba(0, 255, 255, 0.7), 
-      0 0 75px rgba(0, 255, 255, 0.5);
-    position: relative;
-    animation: textGlow 1s infinite, textFlicker 2s infinite, textBroken 8s infinite;
-    letter-spacing: 0.15em;
-    padding: 0.5em 0.8em;
-    -webkit-text-stroke: 1px rgba(0, 255, 255, 0.9);
-    font-weight: bold;
-    mix-blend-mode: screen;
-    z-index: 10;
-    filter: blur(0.7px);
+      0 0 75px rgba(0, 255, 255, 0.5) !important;
+    position: relative !important;
+    animation: textGlow 1s infinite, textFlicker 2s infinite, textBroken 8s infinite !important;
+    letter-spacing: 0.15em !important;
+    padding: 0.5em 0.8em !important;
+    -webkit-text-stroke: 1px rgba(0, 255, 255, 0.9) !important;
+    font-weight: bold !important;
+    mix-blend-mode: screen !important;
+    z-index: 10 !important;
+    filter: blur(0.7px) !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
   
   /* グリッチオーバーレイ */

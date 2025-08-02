@@ -1,0 +1,164 @@
+/* サイト名のサイバーパンク風スタイル - CSS Module版 */
+.siteNameCyberpunk {
+  font-family: var(--font-vt323), "Courier New", monospace;
+  color: #ffffff;
+  text-shadow: 
+    0 0 5px #00ffff, 
+    0 0 10px #00ffff, 
+    0 0 15px #00ffff, 
+    0 0 20px #00ffff, 
+    0 0 35px #00ffff, 
+    0 0 40px #00ffff, 
+    0 0 50px rgba(0, 255, 255, 0.7), 
+    0 0 75px rgba(0, 255, 255, 0.5);
+  position: relative;
+  letter-spacing: 0.15em;
+  padding: 0.5em 0.8em;
+  -webkit-text-stroke: 1px rgba(0, 255, 255, 0.9);
+  font-weight: bold;
+  mix-blend-mode: screen;
+  z-index: 10;
+  filter: blur(0.7px);
+  /* アニメーションを適用 */
+  animation: textGlow 2s infinite ease-in-out, textFlicker 5s infinite;
+}
+
+/* グリッチオーバーレイ */
+.glitchOverlayPurple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 0, 255, 0.8);
+  text-shadow: 2px 0 rgba(255, 0, 255, 0.8), -2px 0 rgba(0, 255, 255, 0.8);
+  z-index: 5;
+  font-weight: bold;
+}
+
+.glitchOverlayRed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 0, 0, 0.8);
+  text-shadow: -2px 0 rgba(255, 0, 0, 0.8), 2px 0 rgba(0, 255, 255, 0.8);
+  z-index: 4;
+  font-weight: bold;
+}
+
+/* ノイズオーバーレイ */
+.noiseOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 水平グリッチライン */
+.horizontalGlitch {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(0, 255, 255, 0.7);
+  z-index: 6;
+}
+
+.horizontalGlitch2 {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 0, 255, 0.7);
+  z-index: 6;
+}
+
+/* アニメーション定義 */
+@keyframes textGlow {
+  0% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px rgba(0, 255, 255, 0.7), 0 0 75px rgba(0, 255, 255, 0.5); }
+  50% { text-shadow: 0 0 2px #00ffff, 0 0 5px #00ffff, 0 0 7px #00ffff, 0 0 10px #00ffff, 0 0 17px #00ffff, 0 0 20px #00ffff, 0 0 25px rgba(0, 255, 255, 0.7), 0 0 37px rgba(0, 255, 255, 0.5); }
+  100% { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px rgba(0, 255, 255, 0.7), 0 0 75px rgba(0, 255, 255, 0.5); }
+}
+
+@keyframes textFlicker {
+  0% { opacity: 1; }
+  3% { opacity: 0.8; }
+  6% { opacity: 1; }
+  7% { opacity: 0.9; }
+  8% { opacity: 1; }
+  9% { opacity: 0.9; }
+  10% { opacity: 1; }
+  30% { opacity: 1; }
+  35% { opacity: 0.7; }
+  40% { opacity: 1; }
+  70% { opacity: 1; }
+  80% { opacity: 0.8; }
+  85% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes noiseShift {
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(1px) translateY(-1px); }
+  50% { transform: translateX(-1px) translateY(1px); }
+  75% { transform: translateX(1px) translateY(1px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+@keyframes glitchEffect {
+  0% { transform: translate(0); opacity: 0.8; }
+  10% { transform: translate(-5px, 2px); opacity: 0.9; }
+  20% { transform: translate(-3px, 3px); opacity: 0.8; }
+  30% { transform: translate(0, -2px); opacity: 1; }
+  40% { transform: translate(3px, 1px); opacity: 0.9; }
+  50% { transform: translate(0, 0); opacity: 0.8; }
+  60% { transform: translate(-2px, -2px); opacity: 0.9; }
+  70% { transform: translate(2px, 3px); opacity: 0.8; }
+  80% { transform: translate(-1px, -1px); opacity: 1; }
+  90% { transform: translate(1px, 2px); opacity: 0.9; }
+  100% { transform: translate(0); opacity: 0.8; }
+}
+
+@keyframes glitchEffect2 {
+  0% { transform: translate(0, 0); clip-path: polygon(0 10%, 100% 10%, 100% 25%, 0 25%, 0 40%, 100% 40%, 100% 65%, 0 65%); }
+  20% { transform: translate(2px, -1px); }
+  40% { transform: translate(-2px, 1px); clip-path: polygon(0 8%, 100% 8%, 100% 27%, 0 27%, 0 38%, 100% 38%, 100% 67%, 0 67%); }
+  60% { transform: translate(1px, -2px); }
+  80% { transform: translate(-1px, 2px); clip-path: polygon(0 12%, 100% 12%, 100% 23%, 0 23%, 0 42%, 100% 42%, 100% 63%, 0 63%); }
+  100% { transform: translate(0, 0); clip-path: polygon(0 10%, 100% 10%, 100% 25%, 0 25%, 0 40%, 100% 40%, 100% 65%, 0 65%); }
+}
+
+/* アニメーションの適用 */
+.siteNameCyberpunk {
+  animation: textGlow 2s infinite, textFlicker 5s infinite;
+}
+
+.glitchOverlayPurple {
+  animation: glitchEffect 2s infinite;
+}
+
+.glitchOverlayRed {
+  animation: glitchEffect2 2.5s infinite;
+}
+
+.noiseOverlay {
+  animation: noiseShift 3s infinite;
+}
+
+.horizontalGlitch {
+  animation: glitchEffect 4s infinite;
+}
+
+.horizontalGlitch2 {
+  animation: glitchEffect2 3s infinite;
+}
