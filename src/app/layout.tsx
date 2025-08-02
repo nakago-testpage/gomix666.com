@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP } from "next/font/google";
+import { Noto_Sans_JP, VT323 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -10,6 +10,12 @@ import ScrollAnimation from '@/components/ScrollAnimation';
 const notoSansJp = Noto_Sans_JP({
   subsets: ["latin"],
   weight: ["400", "700"],
+});
+
+const vt323 = VT323({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-vt323",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={`${notoSansJp.className} bg-black text-white`}>
+      <body className={`${notoSansJp.className} ${vt323.variable} bg-black text-white`}>
         <StarrySky />
         <ShootingStarCursor />
         <ScrollAnimation />

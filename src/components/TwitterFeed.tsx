@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Script from 'next/script';
-import { FaTwitter } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import Link from 'next/link';
 
 interface TwitterFeedProps {
@@ -81,7 +81,7 @@ const TwitterFeed: React.FC<TwitterFeedProps> = ({ username }) => {
           rel="noopener noreferrer"
           className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
         >
-          <FaTwitter className="mr-2" />
+          <FaXTwitter className="mr-2" />
           View Full Profile on X
         </Link>
       </div>

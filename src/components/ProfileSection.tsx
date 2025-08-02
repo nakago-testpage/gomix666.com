@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaTwitter, FaYoutube, FaGlobe, FaRetweet, FaHeart, FaReply } from 'react-icons/fa';
+import { FaXTwitter, FaYoutube, FaGlobe, FaRetweet, FaHeart, FaReply } from 'react-icons/fa6';
 
 // Gomixロゴ画像のBase64データ（添付された画像から変換）
 const gomixLogoBase64 = '/images/gomix-logo.png';
@@ -29,7 +29,7 @@ const ProfileSection: React.FC = () => {
                 <div className="text-center md:text-left">
                   <h3 className="text-2xl font-bold text-white mb-2">gomix666</h3>
                   <div className="flex items-center justify-center md:justify-start text-cyan-400 mb-4">
-                    <FaTwitter className="mr-2" />
+                    <FaXTwitter className="mr-2" />
                     <Link 
                       href="https://x.com/gomix666" 
                       target="_blank" 
@@ -46,7 +46,7 @@ const ProfileSection: React.FC = () => {
                     className="inline-block bg-gradient-to-r from-cyan-500 to-emerald-600 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transition-transform duration-300 shadow-lg"
                   >
                     <div className="flex items-center justify-center">
-                      <FaTwitter className="mr-2" />
+                      <FaXTwitter className="mr-2" />
                       <span>Follow on X</span>
                     </div>
                   </a>
